@@ -13,10 +13,11 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
 import { AddUser } from "../../components/AddUser";
+import { EditProfile } from "../../components/EditProfile";
 import { EditUser } from "../../components/EditUser";
 import { HomeHeader } from "../../components/HomeHeader";
 
-import { useUserManagement } from "../../hooks";
+import { useAuth, useUserManagement } from "../../hooks";
 
 interface User {
   id: string;
@@ -28,7 +29,9 @@ interface User {
 export const Home: React.FC = () => {
   const [editUser, setEditUser] = useState<User | null>(null);
   const [addUser, setAddUser] = useState(false);
+  const [editProfile, setEditProfile] = useState(false);
 
+  const { loggedUser } = useAuth();
   const { users, createUser, deleteUser, updateUser } = useUserManagement();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,50 +47,79 @@ export const Home: React.FC = () => {
     }
   };
 
-  const cancelEdit = () => {
-    setEditUser(null);
-  };
-
   return (
     <Container
       component="main"
-      style={{
-        padding: 24,
+      sx={{
+        p: 3,
       }}
     >
       <Box>
-        <List subheader={<HomeHeader handleAddUser={() => setAddUser(true)} />}>
-          {users.map((user) => (
-            <ListItem key={user.id} divider>
-              <ListItemText primary={user.name} secondary={user.email} />
-              <ListItemSecondaryAction>
-                <IconButton
-                  aria-label="edit"
-                  onClick={() => setEditUser(user)}
-                >
-                  <EditIcon />
-                </IconButton>
-                <IconButton
-                  aria-label="delete"
-                  onClick={() => deleteUser(user.id)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
+        <List
+          subheader={
+            <HomeHeader
+              userName={loggedUser!.name}
+              handleEditProfile={() => setEditProfile(true)}
+              handleAddUser={() => setAddUser(true)}
+            />
+          }
+        >
+          {users.map((user) => {
+            if (user.id !== loggedUser!.id) {
+              return (
+                <ListItem key={user.id} divider>
+                  <img
+                    srcSet={`https://picsum.photos/200?random=${user.id}`}
+                    src={`https://picsum.photos/200?random=${user.id}`}
+                    alt="Imagem de perfil do usuario"
+                    loading="lazy"
+                    width={40}
+                    height={40}
+                    style={{
+                      borderRadius: "50%",
+                      marginRight: "16px",
+                    }}
+                  />
+
+                  <ListItemText primary={user.name} secondary={user.email} />
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      aria-label="edit"
+                      onClick={() => setEditUser(user)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() => deleteUser(user.id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              );
+            }
+          })}
         </List>
 
         <EditUser
-          cancelEdit={cancelEdit}
+          cancelEdit={() => setEditUser(null)}
           handleSaveChange={handleSaveChange}
           handleChange={handleChange}
           user={editUser}
         />
 
+        <EditProfile
+          handleClose={() => setEditProfile(false)}
+          handleSaveChange={handleSaveChange}
+          handleChange={handleChange}
+          user={loggedUser}
+          isOpen={editProfile}
+        />
+
         <AddUser
           handleClose={() => setAddUser(false)}
-          handleSaveChanges={(user) => createUser(user)}
+          handleSaveChange={(user) => createUser(user)}
           isOpen={addUser}
         />
       </Box>
