@@ -46,7 +46,7 @@ export function SignIn() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Entrar
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
@@ -75,8 +75,9 @@ export function SignIn() {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign In
+            Entrar
           </Button>
+
           <Grid container>
             <Grid item xs>
               <Link href="#" variant="body2">
@@ -85,7 +86,7 @@ export function SignIn() {
             </Grid>
             <Grid item>
               <Link href="/sign-up" variant="body2">
-                {"Criar conta"}
+                Criar conta
               </Link>
             </Grid>
           </Grid>

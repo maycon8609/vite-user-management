@@ -6,7 +6,8 @@ import {
   DialogTitle,
   TextField,
 } from "@mui/material";
-import { User } from "../../contexts";
+
+import { User } from "../../types";
 
 interface EditUserProps {
   cancelEdit: () => void;
@@ -23,13 +24,13 @@ export const EditUser = ({
 }: EditUserProps) => {
   return (
     <Dialog open={!!user} onClose={cancelEdit}>
-      <DialogTitle>Edit User</DialogTitle>
+      <DialogTitle>Editar usuario</DialogTitle>
       <DialogContent>
         {user && (
           <>
             <TextField
               margin="dense"
-              label="Name"
+              label="Nome"
               name="name"
               fullWidth
               value={user.name}
@@ -37,7 +38,7 @@ export const EditUser = ({
             />
             <TextField
               margin="dense"
-              label="Email"
+              label="E-mail"
               name="email"
               fullWidth
               value={user.email}
@@ -45,7 +46,7 @@ export const EditUser = ({
             />
             <TextField
               margin="dense"
-              label="Password"
+              label="Senha"
               name="password"
               type="password"
               fullWidth
@@ -58,10 +59,10 @@ export const EditUser = ({
 
       <DialogActions>
         <Button onClick={cancelEdit} color="primary">
-          Cancel
+          Cancelar
         </Button>
         <Button onClick={handleSaveChange} color="primary">
-          Save
+          Salvar
         </Button>
       </DialogActions>
     </Dialog>

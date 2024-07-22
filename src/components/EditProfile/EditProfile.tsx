@@ -7,7 +7,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { User } from "../../contexts";
+
+import { User } from "../../types";
 
 interface EditProfileProps {
   handleClose: () => void;
@@ -53,7 +54,7 @@ export const EditProfile = ({
           <>
             <TextField
               margin="dense"
-              label="Name"
+              label="Nome"
               name="name"
               fullWidth
               value={user.name}
@@ -61,7 +62,7 @@ export const EditProfile = ({
             />
             <TextField
               margin="dense"
-              label="Email"
+              label="E-mail"
               name="email"
               fullWidth
               value={user.email}
@@ -69,7 +70,7 @@ export const EditProfile = ({
             />
             <TextField
               margin="dense"
-              label="Password"
+              label="Senha"
               name="password"
               type="password"
               fullWidth
@@ -82,10 +83,10 @@ export const EditProfile = ({
 
       <DialogActions>
         <Button onClick={handleClose} color="primary">
-          Cancel
+          Cancelar
         </Button>
         <Button onClick={handleSaveChange} color="primary">
-          Save
+          Salvar
         </Button>
       </DialogActions>
     </Dialog>

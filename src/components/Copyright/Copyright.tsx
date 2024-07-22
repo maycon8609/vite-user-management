@@ -1,6 +1,6 @@
-import { Link, Typography } from "@mui/material"
+import { Link, Typography, TypographyProps } from "@mui/material";
 
-export function Copyright(props: any) {
+export function Copyright(props: TypographyProps) {
   return (
     <Typography
       variant="body2"
@@ -9,11 +9,7 @@ export function Copyright(props: any) {
       {...props}
     >
       {"Copyright © "}
-      <Link
-        color="inherit"
-        href="https://github.com/maycon8609"
-        target="blank"
-      >
+      <Link color="inherit" href="https://github.com/maycon8609" target="blank">
         maycon silva
       </Link>{" "}
       {new Date().getFullYear()}

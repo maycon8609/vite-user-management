@@ -54,7 +54,7 @@ export const HomeHeader = ({
         gap={2}
       >
         <Typography component="h1" variant="h5">
-          Adiciona usuario
+          Adicionar usuario
         </Typography>
 
         <IconButton edge="end" aria-label="add" onClick={handleAddUser}>

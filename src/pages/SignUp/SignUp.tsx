@@ -50,7 +50,7 @@ export function SignUp() {
         </Avatar>
 
         <Typography component="h1" variant="h5">
-          Sign up
+          Inscrever-se
         </Typography>
 
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
@@ -62,7 +62,7 @@ export function SignUp() {
                 required
                 fullWidth
                 id="fullName"
-                label="Full Name"
+                label="Nome completo"
                 autoFocus
               />
             </Grid>
@@ -72,7 +72,7 @@ export function SignUp() {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label="Endereço de e-mail"
                 name="email"
                 autoComplete="email"
               />
@@ -83,7 +83,7 @@ export function SignUp() {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label="Senha"
                 type="password"
                 id="password"
                 autoComplete="new-password"
@@ -97,7 +97,7 @@ export function SignUp() {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign Up
+            Inscrever-se
           </Button>
 
           <Grid container justifyContent="flex-end">

@@ -82,6 +82,7 @@ export const Home: React.FC = () => {
                   />
 
                   <ListItemText primary={user.name} secondary={user.email} />
+
                   <ListItemSecondaryAction>
                     <IconButton
                       aria-label="edit"
@@ -89,6 +90,7 @@ export const Home: React.FC = () => {
                     >
                       <EditIcon />
                     </IconButton>
+                    
                     <IconButton
                       aria-label="delete"
                       onClick={() => deleteUser(user.id)}

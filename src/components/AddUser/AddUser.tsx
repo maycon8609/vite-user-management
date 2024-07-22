@@ -9,7 +9,7 @@ import {
   TextField,
 } from "@mui/material";
 
-import { User } from "../../contexts";
+import { User } from "../../types";
 
 interface AddUserProps {
   handleSaveChange: (user: Omit<User, "id">) => void;
@@ -36,12 +36,12 @@ export const AddUser = ({
       password,
     };
     handleSaveChange(newUser);
-    handleClose()
+    handleClose();
   };
 
   return (
     <Dialog open={isOpen} onClose={handleClose}>
-      <DialogTitle>Add user</DialogTitle>
+      <DialogTitle>Adicionar usuario</DialogTitle>
       <Box component="form" onSubmit={handleSubmit}>
         <DialogContent>
           <>
@@ -79,10 +79,10 @@ export const AddUser = ({
 
         <DialogActions>
           <Button onClick={handleClose} color="primary">
-            Cancel
+            Cancelar
           </Button>
           <Button type="submit" color="primary">
-            Save
+            Salvar
           </Button>
         </DialogActions>
       </Box>

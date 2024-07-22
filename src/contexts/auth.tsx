@@ -6,8 +6,8 @@ import {
   useState,
 } from "react";
 
-import { User } from "./types";
 import { useUserManagement } from "../hooks";
+import { User } from "../types";
 
 
 interface AuthProviderProps {
