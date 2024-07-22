@@ -6,57 +6,62 @@ import {
   useState,
 } from "react";
 
+import { User } from "./types";
+import { useUserManagement } from "../hooks";
+
+
 interface AuthProviderProps {
   children: ReactNode;
 }
 
-interface User {
-  name: string;
-  email: string;
-  password: string;
-}
-
-interface AuthContextProps {
-  user: User | null;
+export interface AuthContextProps {
+  loggedUser: User | null;
   signed: boolean;
   signIn: (email: string, password: string) => string | void;
-  signUp: (name: string, email: string, password: string) => string | void;
   signOut: () => void;
+  signUp: (name: string, email: string, password: string) => string | void;
 }
 
 export const AuthContext = createContext({} as AuthContextProps);
 
 export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
-  const [user, setUser] = useState<User | null>(null);
+  const [loggedUser, setLoggedUser] = useState<User | null>(null);
+
+  const { users, createUser } = useUserManagement();
+
+  const prepareData = (loggedInUserEmail: string, data: User[]) => {
+    const indexToLoggedUser = data.findIndex(
+      (user) => user.email === loggedInUserEmail
+    );
+
+    let loggedUser: User | null = null;
+
+    if (indexToLoggedUser > -1) {
+      loggedUser = data[indexToLoggedUser];
+    }
+
+    return { loggedUser };
+  };
 
   useEffect(() => {
     const userToken = localStorage.getItem("user_token");
-    const usersStorage = localStorage.getItem("users_bd");
 
-    if (userToken && usersStorage) {
-      const users = JSON.parse(usersStorage);
+    if (userToken) {
       const tokenUser = JSON.parse(userToken);
-      const loggedUser = users.find(
-        (user: User) => user.email === tokenUser.email
-      );
-
-      if (loggedUser) {
-        setUser(loggedUser);
-      }
+      const { loggedUser } = prepareData(tokenUser.email, users);
+      if (loggedUser) setLoggedUser(loggedUser);
     }
-  }, []);
+  }, [users]);
 
   const signIn = (email: string, password: string): string | void => {
-    const usersStorage = localStorage.getItem("users_bd");
-    if (!usersStorage) return "Usuário não cadastrado";
+    if (!users.length) return "Usuário não cadastrado";
 
-    const storedUsers: User[] = JSON.parse(usersStorage);
-    const loggedUser = storedUsers.find((user) => user.email === email);
+    const { loggedUser } = prepareData(email, users);
 
     if (loggedUser && loggedUser.password === password) {
       const token = Math.random().toString(36).substring(2);
       localStorage.setItem("user_token", JSON.stringify({ email, token }));
-      setUser(loggedUser);
+      setLoggedUser(loggedUser);
     } else {
       return "E-mail ou senha incorretos";
     }
@@ -67,27 +72,27 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
     email: string,
     password: string
   ): string | void => {
-    const usersStorage = localStorage.getItem("users_bd");
-    const storedUsers: User[] = usersStorage ? JSON.parse(usersStorage) : [];
-
-    const hasUser = storedUsers.find((user) => user.email === email);
-    if (hasUser) {
-      return "Já tem uma conta com esse E-mail";
-    }
+    const hasUser = users.find((user) => user.email === email);
+    if (hasUser) return "Já tem uma conta com esse E-mail";
 
     const newUser = { name, email, password };
-    storedUsers.push(newUser);
-    localStorage.setItem("users_bd", JSON.stringify(storedUsers));
+    createUser(newUser);
   };
 
   const signOut = (): void => {
-    setUser(null);
+    setLoggedUser(null);
     localStorage.removeItem("user_token");
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, signed: !!user, signIn, signUp, signOut }}
+      value={{
+        loggedUser,
+        signed: !!loggedUser,
+        signIn,
+        signOut,
+        signUp,
+      }}
     >
       {children}
     </AuthContext.Provider>
