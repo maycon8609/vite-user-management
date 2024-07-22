@@ -12,14 +12,14 @@ import {
 import { User } from "../../contexts";
 
 interface AddUserProps {
-  handleSaveChanges: (user: Omit<User, "id">) => void;
+  handleSaveChange: (user: Omit<User, "id">) => void;
   handleClose: () => void;
   isOpen: boolean;
 }
 
 export const AddUser = ({
   handleClose,
-  handleSaveChanges,
+  handleSaveChange,
   isOpen,
 }: AddUserProps) => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -35,7 +35,7 @@ export const AddUser = ({
       email,
       password,
     };
-    handleSaveChanges(newUser);
+    handleSaveChange(newUser);
     handleClose()
   };
 
