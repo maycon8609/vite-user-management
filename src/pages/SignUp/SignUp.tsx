@@ -1,7 +1,8 @@
-import { FC, FormEvent } from "react";
+import { FC, FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
+  Alert,
   Avatar,
   Box,
   Button,
@@ -17,6 +18,8 @@ import { Copyright } from "../../components/Copyright";
 import { useAuth } from "../../hooks/useAuth";
 
 export const SignUp: FC = () => {
+  const [error, setError] = useState<string | null>(null);
+
   const { signUp } = useAuth();
   const navigate = useNavigate();
 
@@ -24,13 +27,21 @@ export const SignUp: FC = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    const name = data.get("fullName") as string;
-    const email = data.get("email") as string;
-    const password = data.get("password") as string;
+    const name = data.get("fullName") as string | null;
+    const email = data.get("email") as string | null;
+    const password = data.get("password") as string | null;
 
-    const response = signUp(name, email, password);
+    let response;
+    if (!name || !email || !password) {
+      response = "Nome, e-mail e senha obrigatórios para criar um novo usuario"
+    } else {
+      response = signUp(name, email, password);
+    }
 
-    if (!response) {
+    if (response) {
+      setError(response);
+    } else {
+      setError(null);
       navigate("/home");
     }
   };
@@ -52,6 +63,12 @@ export const SignUp: FC = () => {
         <Typography component="h1" variant="h5">
           Inscrever-se
         </Typography>
+
+        {error && (
+          <Alert severity="error" sx={{ width: "100%", mt: 2 }}>
+            {error}
+          </Alert>
+        )}
 
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
@@ -100,13 +117,11 @@ export const SignUp: FC = () => {
             Inscrever-se
           </Button>
 
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link href="/" variant="body2">
-                já tem uma conta? Entrar
-              </Link>
-            </Grid>
-          </Grid>
+          <Box display="flex" justifyContent="center">
+            <Link href="/" variant="body2">
+              já tem uma conta? Entrar
+            </Link>
+          </Box>
         </Box>
       </Box>
 

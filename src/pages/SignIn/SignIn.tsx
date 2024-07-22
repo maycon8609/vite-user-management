@@ -1,12 +1,12 @@
-import { FC, FormEvent } from "react";
+import { FC, FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
+  Alert,
   Avatar,
   Box,
   Button,
   Container,
-  Grid,
   Link,
   TextField,
   Typography,
@@ -17,6 +17,8 @@ import { Copyright } from "../../components/Copyright";
 import { useAuth } from "../../hooks/useAuth";
 
 export const SignIn: FC = () => {
+  const [error, setError] = useState<string | null>(null);
+
   const { signIn } = useAuth();
   const navigate = useNavigate();
 
@@ -24,12 +26,22 @@ export const SignIn: FC = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    const email = data.get("email") as string;
-    const password = data.get("password") as string;
+    const email = data.get("email") as string | null;
+    const password = data.get("password") as string | null;
 
-    const response = signIn(email, password);
+    let response;
+    if (!email || !password) {
+      response = "E-mail e senha obrigatórios para acessar a aplicação";
+    } else {
+      response = signIn(email, password);
+    }
 
-    if (!response) navigate("/home");
+    if (response) {
+      setError(response);
+    } else {
+      setError(null);
+      navigate("/home");
+    }
   };
 
   return (
@@ -48,26 +60,33 @@ export const SignIn: FC = () => {
         <Typography component="h1" variant="h5">
           Entrar
         </Typography>
+
+        {error && (
+          <Alert severity="error" sx={{ width: "100%", mt: 2 }}>
+            {error}
+          </Alert>
+        )}
+
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
             autoComplete="email"
             autoFocus
+            fullWidth
+            id="email"
+            label="Endereço de e-mail"
+            margin="normal"
+            name="email"
+            required
           />
           <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
             autoComplete="current-password"
+            fullWidth
+            id="password"
+            label="Senha"
+            margin="normal"
+            name="password"
+            required
+            type="password"
           />
           <Button
             type="submit"
@@ -78,21 +97,14 @@ export const SignIn: FC = () => {
             Entrar
           </Button>
 
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Recuperar senha
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="/sign-up" variant="body2">
-                Criar conta
-              </Link>
-            </Grid>
-          </Grid>
+          <Box display="flex" justifyContent="center">
+            <Link href="/sign-up" variant="body2">
+              Criar conta
+            </Link>
+          </Box>
         </Box>
       </Box>
       <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   );
-}
+};
