@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
     password: string
   ): string | void => {
     const hasUser = users.find((user) => user.email === email);
-    if (hasUser) return "Já tem uma conta com esse E-mail";
+    if (hasUser) return "Já existe um usuario cadastrado com este e-mail";
 
     const newUser = { name, email, password };
     createUser(newUser);

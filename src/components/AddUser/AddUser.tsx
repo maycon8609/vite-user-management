@@ -50,7 +50,7 @@ export const AddUser: FC<AddUserProps> = ({
               autoFocus
               fullWidth
               id="name"
-              label="Name"
+              label="Nome"
               margin="dense"
               name="name"
               required
@@ -59,7 +59,7 @@ export const AddUser: FC<AddUserProps> = ({
               autoComplete="email"
               fullWidth
               id="email"
-              label="Email"
+              label="E-mail"
               margin="dense"
               name="email"
               required
@@ -68,7 +68,7 @@ export const AddUser: FC<AddUserProps> = ({
               autoComplete="password"
               fullWidth
               id="password"
-              label="Password"
+              label="Senha"
               margin="dense"
               name="password"
               type="password"

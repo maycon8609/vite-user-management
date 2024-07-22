@@ -7,6 +7,7 @@ import {
 } from "react";
 
 import { User } from "../types";
+import { mockUsersDB } from "./util";
 
 interface UserManagementProviderProps {
   children: ReactNode;
@@ -34,6 +35,8 @@ export const UserManagementProvider = ({
     if (usersStorage) {
       const storedUsers: User[] = JSON.parse(usersStorage);
       setUsers(storedUsers);
+    } else {
+      mockUsersDB()
     }
   };
 
