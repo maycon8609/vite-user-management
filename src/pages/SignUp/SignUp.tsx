@@ -9,7 +9,7 @@ import {
   Grid,
   Link,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
@@ -28,17 +28,10 @@ export function SignUp() {
     const email = data.get("email") as string;
     const password = data.get("password") as string;
 
-    // TODO: remove
-    console.log({ name, email, password });
-
     const response = signUp(name, email, password);
-    
-    // TODO: remove
-    console.log("response")
-    console.log({response})
 
     if (!response) {
-      navigate('/home')
+      navigate("/home");
     }
   };
 

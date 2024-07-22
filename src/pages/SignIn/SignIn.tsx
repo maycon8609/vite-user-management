@@ -27,14 +27,7 @@ export function SignIn() {
     const email = data.get("email") as string;
     const password = data.get("password") as string;
 
-    // TODO: remove
-    console.log({ email, password });
-
     const response = signIn(email, password);
-
-    // TODO: remove
-    console.log("response");
-    console.log({ response });
 
     if (!response) navigate("/home");
   };
