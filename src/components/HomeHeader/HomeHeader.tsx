@@ -2,10 +2,16 @@ import { Box, IconButton, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
 interface HomeHeaderProps {
+  userName: string;
   handleAddUser: () => void;
+  handleEditProfile: () => void;
 }
 
-export const HomeHeader = ({ handleAddUser }: HomeHeaderProps) => {
+export const HomeHeader = ({
+  userName,
+  handleAddUser,
+  handleEditProfile,
+}: HomeHeaderProps) => {
   return (
     <Box
       component="header"
@@ -19,14 +25,14 @@ export const HomeHeader = ({ handleAddUser }: HomeHeaderProps) => {
         justifyContent="space-between"
         alignItems="center"
         gap={1}
-        onClick={() => console.log('test')}
+        onClick={handleEditProfile}
         style={{
-          cursor: 'pointer'
+          cursor: "pointer",
         }}
       >
         <img
-          srcSet="https://placehold.co/60?text=User&font=roboto"
-          src="https://placehold.co/60?text=User&font=roboto"
+          srcSet="https://picsum.photos/200?random=1"
+          src="https://picsum.photos/200?random=1"
           alt="Imagem de perfil do usuario"
           loading="lazy"
           width={40}
@@ -37,7 +43,7 @@ export const HomeHeader = ({ handleAddUser }: HomeHeaderProps) => {
         />
 
         <Typography component="h1" variant="h5">
-          Acessar perfil
+          {userName}
         </Typography>
       </Box>
 
