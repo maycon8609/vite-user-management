@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { User } from "../../contexts";
 
-interface EditeUserProps {
+interface EditUserProps {
   cancelEdit: () => void;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleSaveChange: () => void;
@@ -20,7 +20,7 @@ export const EditUser = ({
   handleChange,
   handleSaveChange,
   user,
-}: EditeUserProps) => {
+}: EditUserProps) => {
   return (
     <Dialog open={!!user} onClose={cancelEdit}>
       <DialogTitle>Edit User</DialogTitle>
