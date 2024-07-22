@@ -1,3 +1,4 @@
+import { FC } from "react";
 import {
   Box,
   Button,
@@ -18,13 +19,13 @@ interface EditProfileProps {
   isOpen: boolean;
 }
 
-export const EditProfile = ({
+export const EditProfile: FC<EditProfileProps> = ({
   handleClose,
   handleChange,
   handleSaveChange,
   user,
   isOpen,
-}: EditProfileProps) => {
+}) => {
   return (
     <Dialog open={isOpen} onClose={handleClose}>
       <Box

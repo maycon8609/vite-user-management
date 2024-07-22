@@ -1,3 +1,4 @@
+import { FC } from "react";
 import { Box, IconButton, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -7,11 +8,11 @@ interface HomeHeaderProps {
   handleEditProfile: () => void;
 }
 
-export const HomeHeader = ({
+export const HomeHeader: FC<HomeHeaderProps> = ({
   userName,
   handleAddUser,
   handleEditProfile,
-}: HomeHeaderProps) => {
+}) => {
   return (
     <Box
       component="header"

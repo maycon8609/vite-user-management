@@ -1,6 +1,7 @@
+import { FC } from "react";
 import { Link, Typography, TypographyProps } from "@mui/material";
 
-export function Copyright(props: TypographyProps) {
+export const Copyright: FC<TypographyProps> = (props) => {
   return (
     <Typography
       variant="body2"
@@ -16,4 +17,4 @@ export function Copyright(props: TypographyProps) {
       {"."}
     </Typography>
   );
-}
+};

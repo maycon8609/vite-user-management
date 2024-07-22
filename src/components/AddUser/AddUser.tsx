@@ -1,4 +1,4 @@
-import { FormEvent } from "react";
+import { FC, FormEvent } from "react";
 import {
   Box,
   Button,
@@ -17,11 +17,11 @@ interface AddUserProps {
   isOpen: boolean;
 }
 
-export const AddUser = ({
+export const AddUser: FC<AddUserProps> = ({
   handleClose,
   handleSaveChange,
   isOpen,
-}: AddUserProps) => {
+}) => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);

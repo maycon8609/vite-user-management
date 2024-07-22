@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { FC, useState } from "react";
 import {
   Box,
   IconButton,
@@ -26,7 +26,7 @@ interface User {
   password: string;
 }
 
-export const Home: React.FC = () => {
+export const Home: FC = () => {
   const [editUser, setEditUser] = useState<User | null>(null);
   const [addUser, setAddUser] = useState(false);
   const [editProfile, setEditProfile] = useState(false);

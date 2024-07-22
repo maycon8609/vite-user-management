@@ -1,3 +1,4 @@
+import { FC } from "react";
 import {
   Button,
   Dialog,
@@ -16,12 +17,12 @@ interface EditUserProps {
   user: User | null;
 }
 
-export const EditUser = ({
+export const EditUser: FC<EditUserProps> = ({
   cancelEdit,
   handleChange,
   handleSaveChange,
   user,
-}: EditUserProps) => {
+}) => {
   return (
     <Dialog open={!!user} onClose={cancelEdit}>
       <DialogTitle>Editar usuario</DialogTitle>

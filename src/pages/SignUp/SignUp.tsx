@@ -1,4 +1,4 @@
-import { FormEvent } from "react";
+import { FC, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -16,7 +16,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Copyright } from "../../components/Copyright";
 import { useAuth } from "../../hooks/useAuth";
 
-export function SignUp() {
+export const SignUp: FC = () => {
   const { signUp } = useAuth();
   const navigate = useNavigate();
 
@@ -113,4 +113,4 @@ export function SignUp() {
       <Copyright sx={{ mt: 5 }} />
     </Container>
   );
-}
+};
