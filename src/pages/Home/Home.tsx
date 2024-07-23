@@ -82,21 +82,23 @@ export const Home: FC = () => {
 
                   <ListItemText primary={user.name} secondary={user.email} />
 
-                  <ListItemSecondaryAction>
-                    <IconButton
-                      aria-label="edit"
-                      onClick={() => setEditUser(user)}
-                    >
-                      <EditIcon />
-                    </IconButton>
+                  {loggedUser!.type === "ADMIN" && (
+                    <ListItemSecondaryAction>
+                      <IconButton
+                        aria-label="edit"
+                        onClick={() => setEditUser(user)}
+                      >
+                        <EditIcon />
+                      </IconButton>
 
-                    <IconButton
-                      aria-label="delete"
-                      onClick={() => deleteUser(user.id)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() => deleteUser(user.id)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  )}
                 </ListItem>
               );
             }

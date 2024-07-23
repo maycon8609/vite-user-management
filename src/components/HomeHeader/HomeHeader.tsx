@@ -2,6 +2,8 @@ import { FC } from "react";
 import { Box, IconButton, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
+import { useAuth } from "../../hooks";
+
 interface HomeHeaderProps {
   userName: string;
   handleAddUser: () => void;
@@ -13,6 +15,8 @@ export const HomeHeader: FC<HomeHeaderProps> = ({
   handleAddUser,
   handleEditProfile,
 }) => {
+  const { loggedUser } = useAuth();
+
   return (
     <Box
       component="header"
@@ -48,20 +52,22 @@ export const HomeHeader: FC<HomeHeaderProps> = ({
         </Typography>
       </Box>
 
-      <Box
-        display="flex"
-        justifyContent="space-between"
-        alignItems="center"
-        gap={2}
-      >
-        <Typography component="h1" variant="h5">
-          Adicionar usuario
-        </Typography>
+      {loggedUser!.type === "ADMIN" && (
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          gap={2}
+        >
+          <Typography component="h1" variant="h5">
+            Adicionar usuario
+          </Typography>
 
-        <IconButton edge="end" aria-label="add" onClick={handleAddUser}>
-          <AddIcon />
-        </IconButton>
-      </Box>
+          <IconButton edge="end" aria-label="add" onClick={handleAddUser}>
+            <AddIcon />
+          </IconButton>
+        </Box>
+      )}
     </Box>
   );
 };
