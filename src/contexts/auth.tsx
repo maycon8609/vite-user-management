@@ -9,7 +9,6 @@ import {
 import { useUserManagement } from "../hooks";
 import { User } from "../types";
 
-
 interface AuthProviderProps {
   children: ReactNode;
 }
@@ -75,8 +74,7 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
     const hasUser = users.find((user) => user.email === email);
     if (hasUser) return "Já existe um usuario cadastrado com este e-mail";
 
-    const newUser = { name, email, password };
-    createUser(newUser);
+    createUser({ name, email, password, type: "USER" });
   };
 
   const signOut = (): void => {
