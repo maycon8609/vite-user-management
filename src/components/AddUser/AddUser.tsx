@@ -88,6 +88,7 @@ export const AddUser: FC<AddUserProps> = ({
                 label="Tipo"
                 labelId="select-label"
                 name="type"
+                defaultValue="USER"
               >
                 <MenuItem value="USER">USER</MenuItem>
                 <MenuItem value="ADMIN">ADMIN</MenuItem>
