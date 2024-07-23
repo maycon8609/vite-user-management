@@ -1,5 +1,6 @@
-import { FC, FormEvent } from "react";
+import { FC, FormEvent, useState } from "react";
 import {
+  Alert,
   Box,
   Button,
   Dialog,
@@ -13,19 +14,23 @@ import {
   TextField,
 } from "@mui/material";
 
-import { User } from "../../types";
+import { useUserManagement } from "../../hooks";
 
 interface AddUserProps {
-  handleSaveChange: (user: Omit<User, "id">) => void;
-  handleClose: () => void;
+  onClose: () => void;
   isOpen: boolean;
 }
 
-export const AddUser: FC<AddUserProps> = ({
-  handleClose,
-  handleSaveChange,
-  isOpen,
-}) => {
+export const AddUser: FC<AddUserProps> = ({ onClose, isOpen }) => {
+  const [error, setError] = useState<string | null>(null);
+
+  const { createUser } = useUserManagement();
+
+  const onCloseDialog = () => {
+    setError(null);
+    onClose();
+  };
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -41,13 +46,26 @@ export const AddUser: FC<AddUserProps> = ({
       password,
       type,
     };
-    handleSaveChange(newUser);
-    handleClose();
+
+    const response = createUser(newUser);
+
+    if (response) {
+      setError(response.errorMessage);
+    } else {
+      onCloseDialog();
+    }
   };
 
   return (
-    <Dialog open={isOpen} onClose={handleClose}>
+    <Dialog open={isOpen} onClose={onCloseDialog}>
       <DialogTitle>Adicionar usuario</DialogTitle>
+
+      {error && (
+        <Alert severity="error" sx={{ m: 3, mt: 0, mb: 0 }}>
+          {error}
+        </Alert>
+      )}
+
       <Box component="form" onSubmit={handleSubmit}>
         <DialogContent>
           <>
@@ -98,7 +116,7 @@ export const AddUser: FC<AddUserProps> = ({
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={onCloseDialog} color="primary">
             Cancelar
           </Button>
           <Button type="submit" color="primary">
