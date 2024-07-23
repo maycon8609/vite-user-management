@@ -1,4 +1,4 @@
-import { ChangeEvent, FC } from "react";
+import { ChangeEvent, FC, useEffect, useState } from "react";
 import {
   Button,
   Dialog,
@@ -13,33 +13,44 @@ import {
   TextField,
 } from "@mui/material";
 
+import { useUserManagement } from "../../hooks";
 import { User } from "../../types";
 
 interface EditUserProps {
-  cancelEdit: () => void;
-  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleSaveChange: () => void;
+  onClose: () => void;
   user: User | null;
 }
 
-export const EditUser: FC<EditUserProps> = ({
-  cancelEdit,
-  handleChange,
-  handleSaveChange,
-  user,
-}) => {
-  const handleSelectChange = (event: SelectChangeEvent) => {
+export const EditUser: FC<EditUserProps> = ({ onClose, user: data }) => {
+  const [user, setUser] = useState<User | null>(data);
+
+  const { updateUser } = useUserManagement();
+
+  useEffect(() => {
+    setUser(data);
+  }, [data]);
+
+  const handleChange = (
+    event:
+      | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      | SelectChangeEvent
+  ) => {
     const { name, value } = event.target;
-    handleChange({
-      target: {
-        name,
-        value,
-      },
-    } as ChangeEvent<HTMLInputElement>);
+
+    if (user) {
+      setUser({ ...user, [name]: value });
+    }
+  };
+
+  const handleSaveChange = () => {
+    if (user) {
+      updateUser(user);
+      onClose();
+    }
   };
 
   return (
-    <Dialog open={!!user} onClose={cancelEdit}>
+    <Dialog open={!!user} onClose={onClose}>
       <DialogTitle>Editar usuario</DialogTitle>
       <DialogContent>
         {user && (
@@ -77,7 +88,7 @@ export const EditUser: FC<EditUserProps> = ({
                 label="Tipo"
                 labelId="select-label"
                 name="type"
-                onChange={handleSelectChange}
+                onChange={handleChange}
                 value={user.type}
               >
                 <MenuItem value="USER">USER</MenuItem>
@@ -89,7 +100,7 @@ export const EditUser: FC<EditUserProps> = ({
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={cancelEdit} color="primary">
+        <Button onClick={onClose} color="primary">
           Cancelar
         </Button>
         <Button onClick={handleSaveChange} color="primary">
