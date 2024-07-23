@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 import {
   Box,
   IconButton,
@@ -18,13 +18,7 @@ import { EditUser } from "../../components/EditUser";
 import { HomeHeader } from "../../components/HomeHeader";
 
 import { useAuth, useUserManagement } from "../../hooks";
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-}
+import { User } from "../../types";
 
 export const Home: FC = () => {
   const [editUser, setEditUser] = useState<User | null>(null);
@@ -34,7 +28,7 @@ export const Home: FC = () => {
   const { loggedUser } = useAuth();
   const { users, createUser, deleteUser, updateUser } = useUserManagement();
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (editUser) {
       setEditUser({ ...editUser, [event.target.name]: event.target.value });
     }
@@ -81,6 +75,11 @@ export const Home: FC = () => {
                     }}
                   />
 
+                  <ListItemText
+                    secondary={user.type}
+                    style={{ maxWidth: "100px" }}
+                  />
+
                   <ListItemText primary={user.name} secondary={user.email} />
 
                   <ListItemSecondaryAction>
@@ -90,7 +89,7 @@ export const Home: FC = () => {
                     >
                       <EditIcon />
                     </IconButton>
-                    
+
                     <IconButton
                       aria-label="delete"
                       onClick={() => deleteUser(user.id)}

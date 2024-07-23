@@ -1,10 +1,15 @@
-import { FC } from "react";
+import { ChangeEvent, FC } from "react";
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   TextField,
 } from "@mui/material";
 
@@ -23,6 +28,16 @@ export const EditUser: FC<EditUserProps> = ({
   handleSaveChange,
   user,
 }) => {
+  const handleSelectChange = (event: SelectChangeEvent) => {
+    const { name, value } = event.target;
+    handleChange({
+      target: {
+        name,
+        value,
+      },
+    } as ChangeEvent<HTMLInputElement>);
+  };
+
   return (
     <Dialog open={!!user} onClose={cancelEdit}>
       <DialogTitle>Editar usuario</DialogTitle>
@@ -54,6 +69,21 @@ export const EditUser: FC<EditUserProps> = ({
               value={user.password}
               onChange={handleChange}
             />
+
+            <FormControl fullWidth sx={{ mt: 2 }}>
+              <InputLabel id="select-label">Tipo</InputLabel>
+              <Select
+                id="select"
+                label="Tipo"
+                labelId="select-label"
+                name="type"
+                onChange={handleSelectChange}
+                value={user.type}
+              >
+                <MenuItem value="USER">USER</MenuItem>
+                <MenuItem value="ADMIN">ADMIN</MenuItem>
+              </Select>
+            </FormControl>
           </>
         )}
       </DialogContent>

@@ -6,6 +6,10 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
   TextField,
 } from "@mui/material";
 
@@ -29,11 +33,13 @@ export const AddUser: FC<AddUserProps> = ({
     const name = data.get("name") as string;
     const email = data.get("email") as string;
     const password = data.get("password") as string;
+    const type = data.get("type") as "ADMIN" | "USER";
 
     const newUser = {
       name,
       email,
       password,
+      type,
     };
     handleSaveChange(newUser);
     handleClose();
@@ -74,6 +80,19 @@ export const AddUser: FC<AddUserProps> = ({
               type="password"
               required
             />
+
+            <FormControl fullWidth sx={{ mt: 2 }}>
+              <InputLabel id="select-label">Tipo</InputLabel>
+              <Select
+                id="select"
+                label="Tipo"
+                labelId="select-label"
+                name="type"
+              >
+                <MenuItem value="USER">USER</MenuItem>
+                <MenuItem value="ADMIN">ADMIN</MenuItem>
+              </Select>
+            </FormControl>
           </>
         </DialogContent>
 
