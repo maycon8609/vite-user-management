@@ -15,7 +15,7 @@ interface UserManagementProviderProps {
 
 export interface UserManagementContextProps {
   users: User[];
-  createUser: (user: Omit<User, "id">) => void;
+  createUser: (user: Omit<User, "id">) => { errorMessage: string } | void;
   updateUser: (user: Partial<Omit<User, "id">> & Pick<User, "id">) => void;
   deleteUser: (id: string) => void;
 }
@@ -36,7 +36,7 @@ export const UserManagementProvider = ({
       const storedUsers: User[] = JSON.parse(usersStorage);
       setUsers(storedUsers);
     } else {
-      mockUsersDB()
+      mockUsersDB();
     }
   };
 
@@ -44,7 +44,16 @@ export const UserManagementProvider = ({
     loadUserData();
   }, []);
 
-  const createUser = (user: Omit<User, "id">) => {
+  const createUser = (
+    user: Omit<User, "id">
+  ): { errorMessage: string } | void => {
+    const userAlreadyExists = users.find((item) => item.email === user.email);
+
+    if (userAlreadyExists)
+      return {
+        errorMessage: "Já existe um usuario cadastrado com este e-mail",
+      };
+
     const data: User[] = [
       ...users,
       {
@@ -56,19 +65,19 @@ export const UserManagementProvider = ({
     loadUserData();
   };
 
-  const updateUser = (user: Partial<Omit<User, "id">> & Pick<User, "id">) => {
+  const updateUser = (
+    user: Partial<Omit<User, "id">> & Pick<User, "id">
+  ): void => {
     const data = users;
     const indexToTargetUser = data.findIndex((item) => item.id === user.id);
 
-    if (indexToTargetUser > -1) {
-      data[indexToTargetUser] = {
-        ...data[indexToTargetUser],
-        ...user,
-      };
+    data[indexToTargetUser] = {
+      ...data[indexToTargetUser],
+      ...user,
+    };
 
-      localStorage.setItem("users_bd", JSON.stringify(data));
-      loadUserData();
-    }
+    localStorage.setItem("users_bd", JSON.stringify(data));
+    loadUserData();
   };
 
   const deleteUser = (id: string) => {
