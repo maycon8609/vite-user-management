@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useState } from "react";
+import { FC, useState } from "react";
 import {
   Box,
   IconButton,
@@ -22,24 +22,11 @@ import { User } from "../../types";
 
 export const Home: FC = () => {
   const [editUser, setEditUser] = useState<User | null>(null);
-  const [addUser, setAddUser] = useState(false);
-  const [editProfile, setEditProfile] = useState(false);
+  const [openAddUser, setOpenAddUser] = useState(false);
+  const [isEditProfile, setIsEditProfile] = useState(false);
 
   const { loggedUser } = useAuth();
-  const { users, createUser, deleteUser, updateUser } = useUserManagement();
-
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    if (editUser) {
-      setEditUser({ ...editUser, [event.target.name]: event.target.value });
-    }
-  };
-
-  const handleSaveChange = () => {
-    if (editUser) {
-      updateUser(editUser);
-      setEditUser(null);
-    }
-  };
+  const { users, deleteUser } = useUserManagement();
 
   return (
     <Container
@@ -53,8 +40,8 @@ export const Home: FC = () => {
           subheader={
             <HomeHeader
               userName={loggedUser!.name}
-              handleEditProfile={() => setEditProfile(true)}
-              handleAddUser={() => setAddUser(true)}
+              handleEditProfile={() => setIsEditProfile(true)}
+              handleAddUser={() => setOpenAddUser(true)}
             />
           }
         >
@@ -105,26 +92,14 @@ export const Home: FC = () => {
           })}
         </List>
 
-        <EditUser
-          cancelEdit={() => setEditUser(null)}
-          handleSaveChange={handleSaveChange}
-          handleChange={handleChange}
-          user={editUser}
-        />
+        <EditUser onClose={() => setEditUser(null)} user={editUser} />
 
         <EditProfile
-          handleClose={() => setEditProfile(false)}
-          handleSaveChange={handleSaveChange}
-          handleChange={handleChange}
-          user={loggedUser}
-          isOpen={editProfile}
+          onClose={() => setIsEditProfile(false)}
+          isOpen={isEditProfile}
         />
 
-        <AddUser
-          handleClose={() => setAddUser(false)}
-          handleSaveChange={(user) => createUser(user)}
-          isOpen={addUser}
-        />
+        <AddUser onClose={() => setOpenAddUser(false)} isOpen={openAddUser} />
       </Box>
     </Container>
   );
