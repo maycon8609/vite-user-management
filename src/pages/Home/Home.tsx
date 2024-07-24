@@ -21,14 +21,15 @@ import { useAuth, useUserManagement } from "@/hooks";
 import { User } from "@/types";
 
 export const Home: FC = () => {
-  const [editUser, setEditUser] = useState<User | null>(null);
-  const [openAddUser, setOpenAddUser] = useState(false);
   const [editProfile, setEditProfile] = useState<User | null>(null);
+  const [editUser, setEditUser] = useState<User | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [openAddUser, setOpenAddUser] = useState(false);
 
   const { loggedUser } = useAuth();
-  const { users, deleteUser, updateUser } = useUserManagement();
+  const { users, deleteUser, updateUser, createUser } = useUserManagement();
 
-  const editProfileHandleChange = (
+  const handleChangeToEditProfile = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = event.target;
@@ -38,10 +39,25 @@ export const Home: FC = () => {
     }
   };
 
-  const editProfileHandleSaveChange = () => {
+  const handleSaveChangesToEditProfile = () => {
     if (editProfile) {
       updateUser(editProfile);
       setEditProfile(null);
+    }
+  };
+
+  const handleCloseAddUser = () => {
+    setErrorMessage(null);
+    setOpenAddUser(false);
+  };
+
+  const handleSaveChangesToAddUser = (user: Omit<User, "id">) => {
+    const response = createUser(user);
+
+    if (response) {
+      setErrorMessage(response.errorMessage);
+    } else {
+      handleCloseAddUser();
     }
   };
 
@@ -112,13 +128,18 @@ export const Home: FC = () => {
         <EditUser onClose={() => setEditUser(null)} user={editUser} />
 
         <EditProfile
+          handleChange={handleChangeToEditProfile}
+          handleSaveChanges={handleSaveChangesToEditProfile}
           onClose={() => setEditProfile(null)}
           user={editProfile}
-          handleChange={editProfileHandleChange}
-          handleSaveChange={editProfileHandleSaveChange}
         />
 
-        <AddUser onClose={() => setOpenAddUser(false)} isOpen={openAddUser} />
+        <AddUser
+          createUser={handleSaveChangesToAddUser}
+          errorMessage={errorMessage}
+          isOpen={openAddUser}
+          onClose={handleCloseAddUser}
+        />
       </Box>
     </Container>
   );
