@@ -1,5 +1,9 @@
+import { User } from "@/types";
+
 export type AddUserProps = {
   'data-testid'?: string
-  onClose: () => void;
+  createUser: (user: Omit<User, "id">) => void
+  errorMessage: string | null
   isOpen: boolean;
+  onClose: () => void;
 }

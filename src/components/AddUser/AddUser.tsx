@@ -1,4 +1,4 @@
-import { FC, FormEvent, useState } from "react";
+import { FC, FormEvent } from "react";
 import {
   Alert,
   Box,
@@ -14,24 +14,15 @@ import {
   TextField,
 } from "@mui/material";
 
-import { useUserManagement } from "@/hooks";
-
 import type { AddUserProps } from "./types";
 
 export const AddUser: FC<AddUserProps> = ({
   "data-testid": datatestId = "add-user",
-  onClose,
+  createUser,
+  errorMessage,
   isOpen,
+  onClose,
 }) => {
-  const [error, setError] = useState<string | null>(null);
-
-  const { createUser } = useUserManagement();
-
-  const onCloseDialog = () => {
-    setError(null);
-    onClose();
-  };
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -48,28 +39,26 @@ export const AddUser: FC<AddUserProps> = ({
       type,
     };
 
-    const response = createUser(newUser);
-
-    if (response) {
-      setError(response.errorMessage);
-    } else {
-      onCloseDialog();
-    }
+    createUser(newUser);
   };
 
   return (
-    <Dialog open={isOpen} onClose={onCloseDialog} data-testid={`${datatestId}--dialog`}>
+    <Dialog
+      open={isOpen}
+      onClose={onClose}
+      data-testid={`${datatestId}--dialog`}
+    >
       <DialogTitle data-testid={`${datatestId}--dialog-title`}>
         Adicionar usuario
       </DialogTitle>
 
-      {error && (
+      {errorMessage && (
         <Alert
           data-testid={`${datatestId}--alert`}
           severity="error"
           sx={{ m: 3, mt: 0, mb: 0 }}
         >
-          {error}
+          {errorMessage}
         </Alert>
       )}
 
@@ -153,7 +142,7 @@ export const AddUser: FC<AddUserProps> = ({
           <Button
             color="primary"
             data-testid={`${datatestId}--cancel-button`}
-            onClick={onCloseDialog}
+            onClick={onClose}
           >
             Cancelar
           </Button>
