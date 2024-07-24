@@ -2,7 +2,7 @@ import { render, RenderOptions, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { AddUser } from "./AddUser";
-import { AddUserProps } from "./types";
+import type { AddUserProps } from "./types";
 import { UserManagementContextProps } from "@/contexts";
 
 const mockedUseUserManagement: UserManagementContextProps = {
@@ -12,7 +12,7 @@ const mockedUseUserManagement: UserManagementContextProps = {
   deleteUser: jest.fn(),
 };
 
-jest.mock("../../hooks", () => ({
+jest.mock("@/hooks", () => ({
   useUserManagement: () => mockedUseUserManagement,
 }));
 

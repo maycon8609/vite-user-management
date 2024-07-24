@@ -9,7 +9,10 @@ const config: Config.InitialOptions = {
   },
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['./jest.setup.ts'],
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx']
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
+  moduleNameMapper: {
+    "@/(.*)": "<rootDir>/src/$1"
+  }
 };
 
 export default config;

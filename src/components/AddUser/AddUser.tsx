@@ -14,7 +14,7 @@ import {
   TextField,
 } from "@mui/material";
 
-import { useUserManagement } from "../../hooks";
+import { useUserManagement } from "@/hooks";
 
 import type { AddUserProps } from "./types";
 
