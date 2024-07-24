@@ -81,15 +81,9 @@ export const UserManagementProvider = ({
   };
 
   const deleteUser = (id: string) => {
-    let data = users;
-    const indexToTargetUser = data.findIndex((item) => item.id === id);
-
-    if (indexToTargetUser > -1) {
-      data = indexToTargetUser === 0 ? [] : data.splice(indexToTargetUser, 1);
-
-      localStorage.setItem("users_bd", JSON.stringify(data));
-      loadUserData();
-    }
+    const data = users.filter((user) => user.id !== id);
+    localStorage.setItem("users_bd", JSON.stringify(data));
+    loadUserData();
   };
 
   return (
