@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { FC } from "react";
 import {
   Box,
   Button,
@@ -9,98 +9,80 @@ import {
   Typography,
 } from "@mui/material";
 
-import { User } from "../../types";
-import { useAuth, useUserManagement } from "../../hooks";
+import type { EditProfileProps } from "./types";
 
-interface EditProfileProps {
-  onClose: () => void;
-  isOpen: boolean;
-}
-
-export const EditProfile: FC<EditProfileProps> = ({ onClose, isOpen }) => {
-  const [user, setUser] = useState<User | null>(null);
-
-  const { loggedUser } = useAuth();
-  const { updateUser } = useUserManagement();
-
-  useEffect(() => {
-    setUser(loggedUser);
-  }, [loggedUser]);
-
-  const handleChange = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = event.target;
-
-    if (user) {
-      setUser({ ...user, [name]: value });
-    }
-  };
-
-  const handleSaveChange = () => {
-    if (user) {
-      updateUser(user);
-      onClose();
-    }
-  };
-
-  const handleCloseDialog = () => {
-    onClose();
-    setUser(loggedUser);
-  };
-
+export const EditProfile: FC<EditProfileProps> = ({
+  "data-testid": datatestId = "edit-profile",
+  handleChange,
+  handleSaveChange,
+  onClose,
+  user,
+}) => {
   return (
-    <Dialog open={isOpen} onClose={onClose}>
+    <Dialog
+      data-testid={`${datatestId}--dialog`}
+      onClose={onClose}
+      open={!!user}
+    >
       {user && (
         <>
           <Box
-            sx={{ m: 1, mt: 2 }}
+            data-testid={`${datatestId}--user-container`}
             display="flex"
+            alignItems="center"
             flexDirection="column"
             justifyContent="center"
-            alignItems="center"
+            sx={{ m: 1, mt: 2 }}
           >
             <img
-              srcSet="https://picsum.photos/200?random=1"
-              src="https://picsum.photos/200?random=1"
               alt="Imagem de perfil do usuario"
-              loading="lazy"
-              width={80}
+              data-testid={`${datatestId}--image-profile`}
               height={80}
+              loading="lazy"
+              src="https://picsum.photos/200?random=1"
+              srcSet="https://picsum.photos/200?random=1"
               style={{
                 borderRadius: "50%",
               }}
+              width={80}
             />
-            <Typography component="h1" variant="h5">
-              {user!.name}
+            <Typography
+              component="h1"
+              data-testid={`${datatestId}--user-name`}
+              variant="h5"
+            >
+              {user.name}
             </Typography>
           </Box>
           <DialogContent>
             <>
               <TextField
-                margin="dense"
+                data-testid={`${datatestId}--field-name`}
+                fullWidth
                 label="Nome"
+                margin="dense"
                 name="name"
-                fullWidth
+                onChange={handleChange}
                 value={user.name}
-                onChange={handleChange}
               />
               <TextField
-                margin="dense"
+                data-testid={`${datatestId}--field-email`}
+                fullWidth
                 label="E-mail"
+                margin="dense"
                 name="email"
-                fullWidth
-                value={user.email}
                 onChange={handleChange}
+                value={user.email}
               />
               <TextField
-                margin="dense"
-                label="Senha"
-                name="password"
-                type="password"
+                data-testid={`${datatestId}--field-password`}
                 fullWidth
-                value={user.password}
+                label="Senha"
+                margin="dense"
+                name="password"
                 onChange={handleChange}
+                type="password"
+                value={user.password}
               />
             </>
           </DialogContent>
@@ -108,10 +90,18 @@ export const EditProfile: FC<EditProfileProps> = ({ onClose, isOpen }) => {
       )}
 
       <DialogActions>
-        <Button onClick={handleCloseDialog} color="primary">
+        <Button
+          color="primary"
+          data-testid={`${datatestId}--cancel-button`}
+          onClick={onClose}
+        >
           Cancelar
         </Button>
-        <Button onClick={handleSaveChange} color="primary">
+        <Button
+          color="primary"
+          data-testid={`${datatestId}--save-button`}
+          onClick={handleSaveChange}
+        >
           Salvar
         </Button>
       </DialogActions>

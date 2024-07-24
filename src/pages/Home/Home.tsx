@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 import {
   Box,
   IconButton,
@@ -12,21 +12,38 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 
-import { AddUser } from "../../components/AddUser";
-import { EditProfile } from "../../components/EditProfile";
-import { EditUser } from "../../components/EditUser";
-import { HomeHeader } from "../../components/HomeHeader";
+import { AddUser } from "@/components/AddUser";
+import { EditProfile } from "@/components/EditProfile";
+import { EditUser } from "@/components/EditUser";
+import { HomeHeader } from "@/components/HomeHeader";
 
-import { useAuth, useUserManagement } from "../../hooks";
-import { User } from "../../types";
+import { useAuth, useUserManagement } from "@/hooks";
+import { User } from "@/types";
 
 export const Home: FC = () => {
   const [editUser, setEditUser] = useState<User | null>(null);
   const [openAddUser, setOpenAddUser] = useState(false);
-  const [isEditProfile, setIsEditProfile] = useState(false);
+  const [editProfile, setEditProfile] = useState<User | null>(null);
 
   const { loggedUser } = useAuth();
-  const { users, deleteUser } = useUserManagement();
+  const { users, deleteUser, updateUser } = useUserManagement();
+
+  const editProfileHandleChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = event.target;
+
+    if (editProfile) {
+      setEditProfile({ ...editProfile, [name]: value });
+    }
+  };
+
+  const editProfileHandleSaveChange = () => {
+    if (editProfile) {
+      updateUser(editProfile);
+      setEditProfile(null);
+    }
+  };
 
   return (
     <Container
@@ -40,7 +57,7 @@ export const Home: FC = () => {
           subheader={
             <HomeHeader
               userName={loggedUser!.name}
-              handleEditProfile={() => setIsEditProfile(true)}
+              handleEditProfile={() => setEditProfile(loggedUser)}
               handleAddUser={() => setOpenAddUser(true)}
             />
           }
@@ -95,8 +112,10 @@ export const Home: FC = () => {
         <EditUser onClose={() => setEditUser(null)} user={editUser} />
 
         <EditProfile
-          onClose={() => setIsEditProfile(false)}
-          isOpen={isEditProfile}
+          onClose={() => setEditProfile(null)}
+          user={editProfile}
+          handleChange={editProfileHandleChange}
+          handleSaveChange={editProfileHandleSaveChange}
         />
 
         <AddUser onClose={() => setOpenAddUser(false)} isOpen={openAddUser} />
