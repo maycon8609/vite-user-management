@@ -14,7 +14,7 @@ import type { EditProfileProps } from "./types";
 export const EditProfile: FC<EditProfileProps> = ({
   "data-testid": datatestId = "edit-profile",
   handleChange,
-  handleSaveChange,
+  handleSaveChanges,
   onClose,
   user,
 }) => {
@@ -100,7 +100,7 @@ export const EditProfile: FC<EditProfileProps> = ({
         <Button
           color="primary"
           data-testid={`${datatestId}--save-button`}
-          onClick={handleSaveChange}
+          onClick={handleSaveChanges}
         >
           Salvar
         </Button>

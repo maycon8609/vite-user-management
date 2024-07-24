@@ -17,7 +17,7 @@ const mockUser: User = {
 
 const makeSut = ({
   handleChange = jest.fn(),
-  handleSaveChange = jest.fn(),
+  handleSaveChanges = jest.fn(),
   onClose = jest.fn(),
   user = mockUser,
   ...props
@@ -25,7 +25,7 @@ const makeSut = ({
   const component = (
     <EditProfile
       handleChange={handleChange}
-      handleSaveChange={handleSaveChange}
+      handleSaveChanges={handleSaveChanges}
       onClose={onClose}
       user={user}
       {...props}
@@ -91,14 +91,14 @@ describe("Components: EditProfile", () => {
     expect(handleChange).toHaveBeenCalledTimes(name.length);
   });
 
-  it("should call handleSaveChange when clicking save", async () => {
-    const handleSaveChange = jest.fn();
-    makeSut({ handleSaveChange });
+  it("should call handleSaveChanges when clicking save", async () => {
+    const handleSaveChanges = jest.fn();
+    makeSut({ handleSaveChanges });
 
     const saveButton = screen.getByTestId("edit-profile--save-button");
     await userEventSetup.click(saveButton);
 
-    expect(handleSaveChange).toHaveBeenCalledTimes(1);
+    expect(handleSaveChanges).toHaveBeenCalledTimes(1);
   });
 
   it("should call the onClose function when clicking the cancel button", async () => {
