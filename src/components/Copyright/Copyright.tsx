@@ -1,12 +1,17 @@
 import { FC } from "react";
-import { Link, Typography, TypographyProps } from "@mui/material";
+import { Link, Typography  } from "@mui/material";
 
-export const Copyright: FC<TypographyProps> = (props) => {
+import type { CopyrightProps } from "./types";
+
+export const Copyright: FC<CopyrightProps> = ({
+  "data-testid": datatestId = "copyright",
+  ...props}) => {
   return (
     <Typography
-      variant="body2"
-      color="text.secondary"
       align="center"
+      color="text.secondary"
+      data-testid={`${datatestId}--typography`}
+      variant="body2"
       {...props}
     >
       {"Copyright © "}
