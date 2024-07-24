@@ -18,7 +18,7 @@ import { EditUser } from "@/components/EditUser";
 import { HomeHeader } from "@/components/HomeHeader";
 
 import { useAuth, useUserManagement } from "@/hooks";
-import { User } from "@/types";
+import type { User } from "@/global/types";
 
 export const Home: FC = () => {
   const [editProfile, setEditProfile] = useState<User | null>(null);

@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import type { RenderOptions } from "@testing-library/react";
 
 import { EditProfile } from "./EditProfile";
-import type { User } from "@/types";
+import type { User } from "@/global/types";
 import type { EditProfileProps } from "./types";
 
 const mockUser: User = {

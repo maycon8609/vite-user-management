@@ -1,24 +1,11 @@
-import {
-  createContext,
-  ReactElement,
-  ReactNode,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, ReactElement, useEffect, useState } from "react";
 
-import { User } from "../types";
 import { mockUsersDB } from "./util";
-
-interface UserManagementProviderProps {
-  children: ReactNode;
-}
-
-export interface UserManagementContextProps {
-  users: User[];
-  createUser: (user: Omit<User, "id">) => { errorMessage: string } | void;
-  updateUser: (user: Partial<Omit<User, "id">> & Pick<User, "id">) => void;
-  deleteUser: (id: string) => void;
-}
+import type { User } from "@/global/types";
+import type {
+  UserManagementContextProps,
+  UserManagementProviderProps,
+} from "./types";
 
 export const UserManagementContext = createContext(
   {} as UserManagementContextProps

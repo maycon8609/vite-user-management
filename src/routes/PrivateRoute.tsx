@@ -1,7 +1,7 @@
 import { ComponentType, FC } from "react";
 
-import { SignIn } from "../pages/SignIn";
-import { useAuth } from "../hooks";
+import { SignIn } from "@/pages/SignIn";
+import { useAuth } from "@/hooks";
 
 interface PrivateRouteProps {
   Page: ComponentType;

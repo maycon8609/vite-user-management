@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 
-import { User } from "../types"
+import { User } from "@/global/types"
 
 const users: User[] = [
   { id: faker.string.uuid(), email: "admin@email.com", name: "administrador", password: '123', type: "ADMIN" },

@@ -13,8 +13,8 @@ import {
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
-import { Copyright } from "../../components/Copyright";
-import { useAuth } from "../../hooks/useAuth";
+import { Copyright } from "@/components/Copyright";
+import { useAuth } from "@/hooks/useAuth";
 
 export const SignIn: FC = () => {
   const [error, setError] = useState<string | null>(null);

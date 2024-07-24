@@ -1,4 +1,4 @@
-import type { User } from "@/types";
+import type { User } from "@/global/types";
 import { ChangeEvent } from "react";
 
 export type EditProfileProps = {

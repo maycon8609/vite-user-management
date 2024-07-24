@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 
 import { useUserManagement } from "../../hooks";
-import { User } from "../../types";
+import { User } from "@/global/types";
 
 interface EditUserProps {
   onClose: () => void;

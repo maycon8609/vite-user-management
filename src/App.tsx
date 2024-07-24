@@ -1,3 +1,5 @@
+import "./global/styles";
+
 import { FC } from "react";
 import { CssBaseline } from "@mui/material";
 import { RouterProvider } from "react-router-dom";
@@ -15,4 +17,4 @@ export const App: FC = () => {
       </AuthProvider>
     </UserManagementProvider>
   );
-}
+};

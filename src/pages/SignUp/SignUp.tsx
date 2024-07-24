@@ -14,8 +14,8 @@ import {
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
-import { Copyright } from "../../components/Copyright";
-import { useAuth } from "../../hooks/useAuth";
+import { Copyright } from "@/components/Copyright";
+import { useAuth } from "@/hooks/useAuth";
 
 export const SignUp: FC = () => {
   const [error, setError] = useState<string | null>(null);
@@ -33,7 +33,7 @@ export const SignUp: FC = () => {
 
     let response;
     if (!name || !email || !password) {
-      response = "Nome, e-mail e senha obrigatórios para criar um novo usuario"
+      response = "Nome, e-mail e senha obrigatórios para criar um novo usuario";
     } else {
       response = signUp(name, email, password);
     }

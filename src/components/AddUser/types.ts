@@ -1,4 +1,4 @@
-import { User } from "@/types";
+import { User } from "@/global/types";
 
 export type AddUserProps = {
   'data-testid'?: string
