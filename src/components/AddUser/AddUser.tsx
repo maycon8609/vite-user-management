@@ -16,12 +16,13 @@ import {
 
 import { useUserManagement } from "../../hooks";
 
-interface AddUserProps {
-  onClose: () => void;
-  isOpen: boolean;
-}
+import type { AddUserProps } from "./types";
 
-export const AddUser: FC<AddUserProps> = ({ onClose, isOpen }) => {
+export const AddUser: FC<AddUserProps> = ({
+  "data-testid": datatestId = "add-user",
+  onClose,
+  isOpen,
+}) => {
   const [error, setError] = useState<string | null>(null);
 
   const { createUser } = useUserManagement();
@@ -57,21 +58,32 @@ export const AddUser: FC<AddUserProps> = ({ onClose, isOpen }) => {
   };
 
   return (
-    <Dialog open={isOpen} onClose={onCloseDialog}>
-      <DialogTitle>Adicionar usuario</DialogTitle>
+    <Dialog open={isOpen} onClose={onCloseDialog} data-testid={`${datatestId}--dialog`}>
+      <DialogTitle data-testid={`${datatestId}--dialog-title`}>
+        Adicionar usuario
+      </DialogTitle>
 
       {error && (
-        <Alert severity="error" sx={{ m: 3, mt: 0, mb: 0 }}>
+        <Alert
+          data-testid={`${datatestId}--alert`}
+          severity="error"
+          sx={{ m: 3, mt: 0, mb: 0 }}
+        >
           {error}
         </Alert>
       )}
 
-      <Box component="form" onSubmit={handleSubmit}>
+      <Box
+        component="form"
+        data-testid={`${datatestId}--form`}
+        onSubmit={handleSubmit}
+      >
         <DialogContent>
           <>
             <TextField
               autoComplete="name"
               autoFocus
+              data-testid={`${datatestId}--field-name`}
               fullWidth
               id="name"
               label="Nome"
@@ -81,6 +93,7 @@ export const AddUser: FC<AddUserProps> = ({ onClose, isOpen }) => {
             />
             <TextField
               autoComplete="email"
+              data-testid={`${datatestId}--field-email`}
               fullWidth
               id="email"
               label="E-mail"
@@ -90,36 +103,65 @@ export const AddUser: FC<AddUserProps> = ({ onClose, isOpen }) => {
             />
             <TextField
               autoComplete="password"
+              data-testid={`${datatestId}--field-password`}
               fullWidth
               id="password"
               label="Senha"
               margin="dense"
               name="password"
-              type="password"
               required
+              type="password"
             />
 
-            <FormControl fullWidth sx={{ mt: 2 }}>
-              <InputLabel id="select-label">Tipo</InputLabel>
+            <FormControl
+              data-testid={`${datatestId}--form-control`}
+              fullWidth
+              sx={{ mt: 2 }}
+            >
+              <InputLabel
+                data-testid={`${datatestId}--form-control--input-label`}
+                id="select-label"
+              >
+                Tipo
+              </InputLabel>
               <Select
+                data-testid={`${datatestId}--form-control--select`}
+                defaultValue="USER"
                 id="select"
                 label="Tipo"
                 labelId="select-label"
                 name="type"
-                defaultValue="USER"
               >
-                <MenuItem value="USER">USER</MenuItem>
-                <MenuItem value="ADMIN">ADMIN</MenuItem>
+                <MenuItem
+                  data-testid={`${datatestId}--menu-item--user`}
+                  value="USER"
+                >
+                  USER
+                </MenuItem>
+                <MenuItem
+                  data-testid={`${datatestId}--menu-item--admin`}
+                  value="ADMIN"
+                >
+                  ADMIN
+                </MenuItem>
               </Select>
             </FormControl>
           </>
         </DialogContent>
 
         <DialogActions>
-          <Button onClick={onCloseDialog} color="primary">
+          <Button
+            color="primary"
+            data-testid={`${datatestId}--cancel-button`}
+            onClick={onCloseDialog}
+          >
             Cancelar
           </Button>
-          <Button type="submit" color="primary">
+          <Button
+            color="primary"
+            data-testid={`${datatestId}--save-button`}
+            type="submit"
+          >
             Salvar
           </Button>
         </DialogActions>

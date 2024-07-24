@@ -1,5 +1,5 @@
 {
-  "name": "my-app-vercel-test-vite",
+  "name": "vite-user-management",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
-    "test": "jest --passWithNoTests --no-cache --runInBand",
+    "test": "jest --verbose --passWithNoTests --no-cache --runInBand",
     "test:watch": "npm run test -- --watch",
     "test:staged": "npm run test -- --findRelatedTests",
     "test:ci": "npm run test -- --coverage"
