@@ -60,12 +60,16 @@ export const SignUp: FC = () => {
           <LockOutlinedIcon />
         </Avatar>
 
-        <Typography component="h1" variant="h5">
+        <Typography data-testid="sign-up--title" component="h1" variant="h5">
           Inscrever-se
         </Typography>
 
         {error && (
-          <Alert severity="error" sx={{ width: "100%", mt: 2 }}>
+          <Alert
+            data-testid="sign-up--error-alert"
+            severity="error"
+            sx={{ width: "100%", mt: 2 }}
+          >
             {error}
           </Alert>
         )}
