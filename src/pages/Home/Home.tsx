@@ -1,249 +1,190 @@
-import { useState } from "react";
-
-import { Box, Button, Container, Typography } from "@mui/material";
-
+import { ChangeEvent, FC, useEffect, useState } from "react";
 import {
-  Add as AddIcon,
-  Edit as EditIcon,
-  DeleteOutlined as DeleteIcon,
-  Save as SaveIcon,
-  Close as CancelIcon,
-} from "@mui/icons-material";
+  Box,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+  Container,
+  SelectChangeEvent,
+} from "@mui/material";
 
-import {
-  GridRowsProp,
-  GridRowModesModel,
-  GridRowModes,
-  DataGrid,
-  GridColDef,
-  GridToolbarContainer,
-  GridActionsCellItem,
-  GridEventListener,
-  GridRowId,
-  GridRowModel,
-  GridRowEditStopReasons,
-  GridSlots,
-} from "@mui/x-data-grid";
-import { Copyright } from "../../components/Copyright";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
 
-interface InitialRowsProps {
-  id: number;
-  name: string;
-  email: string;
-  isNew: boolean;
-}
+import { AddUser } from "@/components/AddUser";
+import { EditProfile } from "@/components/EditProfile";
+import { EditUser } from "@/components/EditUser";
+import { HomeHeader } from "@/components/HomeHeader";
 
-const initialRows: InitialRowsProps[] = [
-  { id: 1, name: "John Doe", email: "john@example.com", isNew: false },
-  { id: 2, name: "Jane Smith", email: "jane@example.com", isNew: false },
-  { id: 3, name: "Alice Johnson", email: "alice@example.com", isNew: false },
-  { id: 4, name: "Bob Brown", email: "bob@example.com", isNew: false },
-  { id: 5, name: "Charlie Davis", email: "charlie@example.com", isNew: false },
-  { id: 6, name: "Diana Evans", email: "diana@example.com", isNew: false },
-  { id: 7, name: "Edward Harris", email: "edward@example.com", isNew: false },
-  { id: 8, name: "Fiona Garcia", email: "fiona@example.com", isNew: false },
-  { id: 9, name: "George Martinez", email: "george@example.com", isNew: false },
-  { id: 10, name: "Hannah Wilson", email: "hannah@example.com", isNew: false },
-  { id: 11, name: "Diana Evans", email: "diana@example.com", isNew: false },
-  { id: 12, name: "Edward Harris", email: "edward@example.com", isNew: false },
-  { id: 13, name: "Fiona Garcia", email: "fiona@example.com", isNew: false },
-  { id: 14, name: "George Martinez", email: "george@example.com", isNew: false },
-  { id: 15, name: "Hannah Wilson", email: "hannah@example.com", isNew: false },
-];
+import { useAuth, useUserManagement } from "@/hooks";
+import type { User } from "@/global/types";
 
-interface EditToolbarProps {
-  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
-  setRowModesModel: (
-    newModel: (oldModel: GridRowModesModel) => GridRowModesModel
-  ) => void;
-}
+export const Home: FC = () => {
+  const [editProfile, setEditProfile] = useState<User | null>(null);
+  const [editUser, setEditUser] = useState<User | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [openAddUser, setOpenAddUser] = useState(false);
 
-function EditToolbar(props: EditToolbarProps) {
-  const { setRows, setRowModesModel } = props;
+  const [profile, setProfile] = useState<User | null>(null);
+  const [listUsers, setListUsers] = useState<User[]>([]);
 
-  const handleClick = () => {
-    const id = Math.random().toString(36).substring(2);
-    setRows((oldRows) => [...oldRows, { id, name: "", age: "", isNew: true }]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
-    }));
-  };
+  const { loggedUser } = useAuth();
+  const { users, deleteUser, updateUser, createUser } = useUserManagement();
 
-  return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
-      </Button>
-    </GridToolbarContainer>
-  );
-}
+  useEffect(() => {
+    let profileData: User | null = null;
+    const listUsersData = users.filter((user) => {
+      if (user.id === loggedUser!.id) {
+        profileData = user;
+        return;
+      }
 
-export function Home() {
-  const [rows, setRows] = useState(initialRows);
-  const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({});
-
-  const handleRowEditStop: GridEventListener<"rowEditStop"> = (
-    params,
-    event
-  ) => {
-    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-      event.defaultMuiPrevented = true;
-    }
-  };
-
-  const handleEditClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-  };
-
-  const handleSaveClick = (id: GridRowId) => () => {
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-  };
-
-  const handleDeleteClick = (id: GridRowId) => () => {
-    setRows(rows.filter((row) => row.id !== id));
-  };
-
-  const handleCancelClick = (id: GridRowId) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+      return user;
     });
 
-    const editedRow = rows.find((row) => row.id === id);
-    if (editedRow!.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
+    setProfile(profileData ?? null);
+    setListUsers(listUsersData);
+  }, [users, loggedUser]);
+
+  // EditUser
+  const handleChangeToEditUser = (
+    event:
+      | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      | SelectChangeEvent
+  ) => {
+    const { name, value } = event.target;
+
+    if (editUser) {
+      setEditUser({ ...editUser, [name]: value });
     }
   };
 
-  const processRowUpdate = (newRow: GridRowModel) => {
-    const updatedRow = { ...newRow, isNew: false } as InitialRowsProps;
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    return updatedRow;
+  const handleSaveChangeToEditUser = () => {
+    if (editUser) {
+      updateUser(editUser);
+      setEditUser(null);
+    }
   };
 
-  const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
-    setRowModesModel(newRowModesModel);
+  // EditProfile
+  const handleChangeToEditProfile = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = event.target;
+
+    if (editProfile) {
+      setEditProfile({ ...editProfile, [name]: value });
+    }
   };
 
-  const columns: GridColDef[] = [
-    { field: "name", headerName: "Name", width: 200, editable: true },
-    { field: "email", headerName: "E-mail", width: 300, editable: true },
-    {
-      field: "actions",
-      type: "actions",
-      headerName: "Actions",
-      width: 100,
-      cellClassName: "actions",
-      getActions: ({ id }) => {
-        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+  const handleSaveChangesToEditProfile = () => {
+    if (editProfile) {
+      updateUser(editProfile);
+      setEditProfile(null);
+    }
+  };
 
-        if (isInEditMode) {
-          return [
-            <GridActionsCellItem
-              icon={<SaveIcon />}
-              label="Save"
-              sx={{ color: "primary.main" }}
-              onClick={handleSaveClick(id)}
-            />,
-            <GridActionsCellItem
-              icon={<CancelIcon />}
-              label="Cancel"
-              className="textPrimary"
-              onClick={handleCancelClick(id)}
-              color="inherit"
-            />,
-          ];
-        }
+  // AddUser
+  const handleCloseAddUser = () => {
+    setErrorMessage(null);
+    setOpenAddUser(false);
+  };
 
-        return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(id)}
-            color="inherit"
-          />,
-        ];
-      },
-    },
-  ];
+  const handleSaveChangesToAddUser = (user: Omit<User, "id">) => {
+    const response = createUser(user);
+
+    if (response) {
+      setErrorMessage(response.errorMessage);
+    } else {
+      handleCloseAddUser();
+    }
+  };
 
   return (
     <Container
       component="main"
-      style={{
-        padding: 24,
+      sx={{
+        p: 3,
       }}
     >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-        }}
-      >
-        <Box
-          component="header"
-          display="flex"
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center"
+      <Box>
+        <List
+          subheader={
+            <HomeHeader
+              user={profile}
+              handleEditProfile={() => setEditProfile(profile)}
+              handleAddUser={() => setOpenAddUser(true)}
+            />
+          }
         >
-          <Typography component="h1" variant="h5">
-            Nome do usuario logado
-          </Typography>
+          {listUsers.map((user) => {
+            return (
+              <ListItem key={user.id} divider>
+                <img
+                  srcSet={`https://picsum.photos/200?random=${user.id}`}
+                  src={`https://picsum.photos/200?random=${user.id}`}
+                  alt="Imagem de perfil do usuario"
+                  loading="lazy"
+                  width={40}
+                  height={40}
+                  style={{
+                    borderRadius: "50%",
+                    marginRight: "16px",
+                  }}
+                />
 
-          <img
-            srcSet="https://placehold.co/60?text=User&font=roboto"
-            src="https://placehold.co/60?text=User&font=roboto"
-            alt="Imagem de perfil do usuario"
-            loading="lazy"
-            width={60}
-            height={60}
-            style={{
-              borderRadius: "50%",
-            }}
-          />
-        </Box>
+                <ListItemText
+                  secondary={user.type}
+                  style={{ maxWidth: "100px" }}
+                />
 
-        <Box
-          sx={{
-            height: 450,
-            width: "100%",
-            "& .actions": {
-              color: "text.secondary",
-            },
-            "& .textPrimary": {
-              color: "text.primary",
-            },
-          }}
-        >
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            editMode="row"
-            rowModesModel={rowModesModel}
-            onRowModesModelChange={handleRowModesModelChange}
-            onRowEditStop={handleRowEditStop}
-            processRowUpdate={processRowUpdate}
-            slots={{
-              toolbar: EditToolbar as GridSlots["toolbar"],
-            }}
-            slotProps={{
-              toolbar: { setRows, setRowModesModel },
-            }}
-          />
-        </Box>
+                <ListItemText primary={user.name} secondary={user.email} />
 
-        <Copyright />
+                {loggedUser!.type === "ADMIN" && (
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      aria-label="edit"
+                      onClick={() => setEditUser(user)}
+                    >
+                      <EditIcon />
+                    </IconButton>
+
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() => deleteUser(user.id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                )}
+              </ListItem>
+            );
+          })}
+        </List>
+
+        <EditUser
+          handleChange={handleChangeToEditUser}
+          handleSaveChange={handleSaveChangeToEditUser}
+          onClose={() => setEditUser(null)}
+          user={editUser}
+        />
+
+        <EditProfile
+          handleChange={handleChangeToEditProfile}
+          handleSaveChanges={handleSaveChangesToEditProfile}
+          onClose={() => setEditProfile(null)}
+          user={editProfile}
+        />
+
+        <AddUser
+          createUser={handleSaveChangesToAddUser}
+          errorMessage={errorMessage}
+          isOpen={openAddUser}
+          onClose={handleCloseAddUser}
+        />
       </Box>
     </Container>
   );
-}
+};

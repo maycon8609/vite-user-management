@@ -1,22 +1,24 @@
-import { FormEvent } from "react";
+import { FC, FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
+  Alert,
   Avatar,
   Box,
   Button,
   Container,
-  Grid,
   Link,
   TextField,
   Typography,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
-import { Copyright } from "../../components/Copyright";
-import { useAuth } from "../../hooks/useAuth";
+import { Copyright } from "@/components/Copyright";
+import { useAuth } from "@/hooks/useAuth";
 
-export function SignIn() {
+export const SignIn: FC = () => {
+  const [error, setError] = useState<string | null>(null);
+
   const { signIn } = useAuth();
   const navigate = useNavigate();
 
@@ -24,19 +26,22 @@ export function SignIn() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    const email = data.get("email") as string;
-    const password = data.get("password") as string;
+    const email = data.get("email") as string | null;
+    const password = data.get("password") as string | null;
 
-    // TODO: remove
-    console.log({ email, password });
+    let response;
+    if (!email || !password) {
+      response = "E-mail e senha obrigatórios para acessar a aplicação";
+    } else {
+      response = signIn(email, password);
+    }
 
-    const response = signIn(email, password);
-
-    // TODO: remove
-    console.log("response");
-    console.log({ response });
-
-    if (!response) navigate("/home");
+    if (response) {
+      setError(response);
+    } else {
+      setError(null);
+      navigate("/home");
+    }
   };
 
   return (
@@ -52,53 +57,58 @@ export function SignIn() {
         <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
+        <Typography component="h1" data-testid="sign-in--title" variant="h5">
+          Entrar
         </Typography>
+
+        {error && (
+          <Alert
+            data-testid="sign-in--error-alert"
+            severity="error"
+            sx={{ width: "100%", mt: 2 }}
+          >
+            {error}
+          </Alert>
+        )}
+
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
             autoComplete="email"
             autoFocus
+            fullWidth
+            id="email"
+            label="Endereço de e-mail"
+            margin="normal"
+            name="email"
+            required
           />
           <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
             autoComplete="current-password"
+            fullWidth
+            id="password"
+            label="Senha"
+            margin="normal"
+            name="password"
+            required
+            type="password"
           />
           <Button
-            type="submit"
             fullWidth
-            variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            type="submit"
+            variant="contained"
           >
-            Sign In
+            Entrar
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Recuperar senha
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="/sign-up" variant="body2">
-                {"Criar conta"}
-              </Link>
-            </Grid>
-          </Grid>
+
+          <Box display="flex" justifyContent="center">
+            <Link href="/sign-up" variant="body2">
+              Criar conta
+            </Link>
+          </Box>
         </Box>
       </Box>
       <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   );
-}
+};

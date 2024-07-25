@@ -1,0 +1,23 @@
+import { render, RenderOptions, screen } from "@testing-library/react";
+import { TypographyProps } from "@mui/material";
+
+import { Copyright } from "./Copyright";
+
+const makeSut = (
+  props: Partial<TypographyProps> = {}
+): Omit<RenderOptions, "wrapper"> => {
+  const component = <Copyright {...props} />;
+
+  return render(component);
+};
+
+describe("Components: Copyright", () => {
+  it("should render the copyright component", () => {
+    const copyrightContent = `Copyright © maycon silva ${new Date().getFullYear()}.`;
+    makeSut();
+
+    const copyright = screen.getByTestId("copyright--typography");
+
+    expect(copyright).toHaveTextContent(copyrightContent);
+  });
+});

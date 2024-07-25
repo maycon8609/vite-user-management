@@ -1,62 +1,44 @@
-import {
-  createContext,
-  ReactElement,
-  ReactNode,
-  useEffect,
-  useState,
-} from "react";
+import { createContext, ReactElement, useEffect, useState } from "react";
 
-interface AuthProviderProps {
-  children: ReactNode;
-}
-
-interface User {
-  name: string;
-  email: string;
-  password: string;
-}
-
-interface AuthContextProps {
-  user: User | null;
-  signed: boolean;
-  signIn: (email: string, password: string) => string | void;
-  signUp: (name: string, email: string, password: string) => string | void;
-  signOut: () => void;
-}
+import { useUserManagement } from "@/hooks";
+import type { User } from "@/global/types";
+import type { AuthContextProps, AuthProviderProps } from "./types";
 
 export const AuthContext = createContext({} as AuthContextProps);
 
 export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
-  const [user, setUser] = useState<User | null>(null);
+  const [loggedUser, setLoggedUser] = useState<Pick<
+    User,
+    "id" | "type"
+  > | null>(null);
+
+  const { users, createUser } = useUserManagement();
 
   useEffect(() => {
     const userToken = localStorage.getItem("user_token");
-    const usersStorage = localStorage.getItem("users_bd");
 
-    if (userToken && usersStorage) {
-      const users = JSON.parse(usersStorage);
-      const tokenUser = JSON.parse(userToken);
-      const loggedUser = users.find(
-        (user: User) => user.email === tokenUser.email
-      );
+    if (userToken && !loggedUser) {
+      const token = JSON.parse(userToken);
 
-      if (loggedUser) {
-        setUser(loggedUser);
-      }
+      const user = users.find((user) => user.id === token.id);
+
+      if (user) setLoggedUser({ id: user.id, type: user.type });
     }
-  }, []);
+  }, [users, loggedUser]);
 
   const signIn = (email: string, password: string): string | void => {
-    const usersStorage = localStorage.getItem("users_bd");
-    if (!usersStorage) return "Usuário não cadastrado";
+    if (!users.length) return "Usuário não cadastrado";
 
-    const storedUsers: User[] = JSON.parse(usersStorage);
-    const loggedUser = storedUsers.find((user) => user.email === email);
+    const user = users.find(
+      (user) => user.email === email && user.password === password
+    );
 
-    if (loggedUser && loggedUser.password === password) {
-      const token = Math.random().toString(36).substring(2);
-      localStorage.setItem("user_token", JSON.stringify({ email, token }));
-      setUser(loggedUser);
+    if (user) {
+      localStorage.setItem(
+        "user_token",
+        JSON.stringify({ id: user.id, type: user.type })
+      );
+      setLoggedUser({ id: user.id, type: user.type });
     } else {
       return "E-mail ou senha incorretos";
     }
@@ -67,27 +49,26 @@ export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
     email: string,
     password: string
   ): string | void => {
-    const usersStorage = localStorage.getItem("users_bd");
-    const storedUsers: User[] = usersStorage ? JSON.parse(usersStorage) : [];
+    const hasUser = users.find((user) => user.email === email);
+    if (hasUser) return "Já existe um usuario cadastrado com este e-mail";
 
-    const hasUser = storedUsers.find((user) => user.email === email);
-    if (hasUser) {
-      return "Já tem uma conta com esse E-mail";
-    }
-
-    const newUser = { name, email, password };
-    storedUsers.push(newUser);
-    localStorage.setItem("users_bd", JSON.stringify(storedUsers));
+    createUser({ name, email, password, type: "USER" });
   };
 
   const signOut = (): void => {
-    setUser(null);
+    setLoggedUser(null);
     localStorage.removeItem("user_token");
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, signed: !!user, signIn, signUp, signOut }}
+      value={{
+        loggedUser,
+        signed: !!loggedUser,
+        signIn,
+        signOut,
+        signUp,
+      }}
     >
       {children}
     </AuthContext.Provider>

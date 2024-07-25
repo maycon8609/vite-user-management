@@ -1,15 +1,20 @@
+import "./global/styles";
+
+import { FC } from "react";
 import { CssBaseline } from "@mui/material";
-import { AuthProvider } from "./contexts/auth";
 import { RouterProvider } from "react-router-dom";
+
+import { AuthProvider } from "./contexts/auth";
+import { UserManagementProvider } from "./contexts";
 import { router } from "./routes";
 
-function App() {
+export const App: FC = () => {
   return (
-    <AuthProvider>
-      <CssBaseline />
-      <RouterProvider router={router} />
-    </AuthProvider>
+    <UserManagementProvider>
+      <AuthProvider>
+        <CssBaseline />
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </UserManagementProvider>
   );
-}
-
-export default App;
+};

@@ -1,7 +1,8 @@
-import { FormEvent } from "react";
+import { FC, FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
+  Alert,
   Avatar,
   Box,
   Button,
@@ -9,14 +10,16 @@ import {
   Grid,
   Link,
   TextField,
-  Typography
+  Typography,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
-import { Copyright } from "../../components/Copyright";
-import { useAuth } from "../../hooks/useAuth";
+import { Copyright } from "@/components/Copyright";
+import { useAuth } from "@/hooks/useAuth";
 
-export function SignUp() {
+export const SignUp: FC = () => {
+  const [error, setError] = useState<string | null>(null);
+
   const { signUp } = useAuth();
   const navigate = useNavigate();
 
@@ -24,21 +27,22 @@ export function SignUp() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    const name = data.get("fullName") as string;
-    const email = data.get("email") as string;
-    const password = data.get("password") as string;
+    const name = data.get("fullName") as string | null;
+    const email = data.get("email") as string | null;
+    const password = data.get("password") as string | null;
 
-    // TODO: remove
-    console.log({ name, email, password });
+    let response;
+    if (!name || !email || !password) {
+      response = "Nome, e-mail e senha obrigatórios para criar um novo usuario";
+    } else {
+      response = signUp(name, email, password);
+    }
 
-    const response = signUp(name, email, password);
-    
-    // TODO: remove
-    console.log("response")
-    console.log({response})
-
-    if (!response) {
-      navigate('/home')
+    if (response) {
+      setError(response);
+    } else {
+      setError(null);
+      navigate("/home");
     }
   };
 
@@ -56,9 +60,19 @@ export function SignUp() {
           <LockOutlinedIcon />
         </Avatar>
 
-        <Typography component="h1" variant="h5">
-          Sign up
+        <Typography data-testid="sign-up--title" component="h1" variant="h5">
+          Inscrever-se
         </Typography>
+
+        {error && (
+          <Alert
+            data-testid="sign-up--error-alert"
+            severity="error"
+            sx={{ width: "100%", mt: 2 }}
+          >
+            {error}
+          </Alert>
+        )}
 
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
@@ -69,7 +83,7 @@ export function SignUp() {
                 required
                 fullWidth
                 id="fullName"
-                label="Full Name"
+                label="Nome completo"
                 autoFocus
               />
             </Grid>
@@ -79,7 +93,7 @@ export function SignUp() {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                label="Endereço de e-mail"
                 name="email"
                 autoComplete="email"
               />
@@ -90,7 +104,7 @@ export function SignUp() {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                label="Senha"
                 type="password"
                 id="password"
                 autoComplete="new-password"
@@ -104,20 +118,18 @@ export function SignUp() {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign Up
+            Inscrever-se
           </Button>
 
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link href="/" variant="body2">
-                já tem uma conta? Entrar
-              </Link>
-            </Grid>
-          </Grid>
+          <Box display="flex" justifyContent="center">
+            <Link href="/" variant="body2">
+              já tem uma conta? Entrar
+            </Link>
+          </Box>
         </Box>
       </Box>
 
       <Copyright sx={{ mt: 5 }} />
     </Container>
   );
-}
+};
