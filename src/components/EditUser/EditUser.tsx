@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { FC } from "react";
 import {
   Button,
   Dialog,
@@ -9,81 +9,72 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  SelectChangeEvent,
   TextField,
 } from "@mui/material";
 
-import { useUserManagement } from "../../hooks";
-import { User } from "@/global/types";
+import type { EditUserProps } from "./types";
 
-interface EditUserProps {
-  onClose: () => void;
-  user: User | null;
-}
-
-export const EditUser: FC<EditUserProps> = ({ onClose, user: data }) => {
-  const [user, setUser] = useState<User | null>(data);
-
-  const { updateUser } = useUserManagement();
-
-  useEffect(() => {
-    setUser(data);
-  }, [data]);
-
-  const handleChange = (
-    event:
-      | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-      | SelectChangeEvent
-  ) => {
-    const { name, value } = event.target;
-
-    if (user) {
-      setUser({ ...user, [name]: value });
-    }
-  };
-
-  const handleSaveChange = () => {
-    if (user) {
-      updateUser(user);
-      onClose();
-    }
-  };
-
+export const EditUser: FC<EditUserProps> = ({
+  "data-testid": datatestId = "edit-user",
+  handleChange,
+  handleSaveChange,
+  onClose,
+  user,
+}) => {
   return (
-    <Dialog open={!!user} onClose={onClose}>
-      <DialogTitle>Editar usuario</DialogTitle>
+    <Dialog
+      open={!!user}
+      onClose={onClose}
+      data-testid={`${datatestId}--dialog`}
+    >
+      <DialogTitle data-testid={`${datatestId}--dialog-title`}>
+        Editar usuario
+      </DialogTitle>
       <DialogContent>
         {user && (
           <>
             <TextField
-              margin="dense"
+              data-testid={`${datatestId}--field-name`}
+              fullWidth
               label="Nome"
+              margin="dense"
               name="name"
-              fullWidth
+              onChange={handleChange}
               value={user.name}
-              onChange={handleChange}
             />
             <TextField
-              margin="dense"
+              data-testid={`${datatestId}--field-email`}
+              fullWidth
               label="E-mail"
+              margin="dense"
               name="email"
-              fullWidth
-              value={user.email}
               onChange={handleChange}
+              value={user.email}
             />
             <TextField
-              margin="dense"
-              label="Senha"
-              name="password"
-              type="password"
+              data-testid={`${datatestId}--field-password`}
               fullWidth
-              value={user.password}
+              label="Senha"
+              margin="dense"
+              name="password"
               onChange={handleChange}
+              type="password"
+              value={user.password}
             />
 
-            <FormControl fullWidth sx={{ mt: 2 }}>
-              <InputLabel id="select-label">Tipo</InputLabel>
+            <FormControl
+              data-testid={`${datatestId}--form-control`}
+              fullWidth
+              sx={{ mt: 2 }}
+            >
+              <InputLabel
+                data-testid={`${datatestId}--form-control--input-label`}
+                id="select-label"
+              >
+                Tipo
+              </InputLabel>
               <Select
+                data-testid={`${datatestId}--form-control--select`}
                 id="select"
                 label="Tipo"
                 labelId="select-label"
@@ -91,8 +82,18 @@ export const EditUser: FC<EditUserProps> = ({ onClose, user: data }) => {
                 onChange={handleChange}
                 value={user.type}
               >
-                <MenuItem value="USER">USER</MenuItem>
-                <MenuItem value="ADMIN">ADMIN</MenuItem>
+                <MenuItem
+                  data-testid={`${datatestId}--menu-item--user`}
+                  value="USER"
+                >
+                  USER
+                </MenuItem>
+                <MenuItem
+                  data-testid={`${datatestId}--menu-item--admin`}
+                  value="ADMIN"
+                >
+                  ADMIN
+                </MenuItem>
               </Select>
             </FormControl>
           </>
@@ -100,10 +101,18 @@ export const EditUser: FC<EditUserProps> = ({ onClose, user: data }) => {
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button
+          color="primary"
+          data-testid={`${datatestId}--cancel-button`}
+          onClick={onClose}
+        >
           Cancelar
         </Button>
-        <Button onClick={handleSaveChange} color="primary">
+        <Button
+          color="primary"
+          data-testid={`${datatestId}--save-button`}
+          onClick={handleSaveChange}
+        >
           Salvar
         </Button>
       </DialogActions>

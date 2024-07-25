@@ -7,6 +7,7 @@ import {
   ListItemText,
   ListItemSecondaryAction,
   Container,
+  SelectChangeEvent,
 } from "@mui/material";
 
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -29,6 +30,27 @@ export const Home: FC = () => {
   const { loggedUser } = useAuth();
   const { users, deleteUser, updateUser, createUser } = useUserManagement();
 
+  // EditUser
+  const handleChangeToEditUser = (
+    event:
+      | ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      | SelectChangeEvent
+  ) => {
+    const { name, value } = event.target;
+
+    if (editUser) {
+      setEditUser({ ...editUser, [name]: value });
+    }
+  };
+
+  const handleSaveChangeToEditUser = () => {
+    if (editUser) {
+      updateUser(editUser);
+      setEditUser(null);
+    }
+  };
+
+  // EditProfile
   const handleChangeToEditProfile = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -46,6 +68,7 @@ export const Home: FC = () => {
     }
   };
 
+  // AddUser
   const handleCloseAddUser = () => {
     setErrorMessage(null);
     setOpenAddUser(false);
@@ -125,7 +148,12 @@ export const Home: FC = () => {
           })}
         </List>
 
-        <EditUser onClose={() => setEditUser(null)} user={editUser} />
+        <EditUser
+          handleChange={handleChangeToEditUser}
+          handleSaveChange={handleSaveChangeToEditUser}
+          onClose={() => setEditUser(null)}
+          user={editUser}
+        />
 
         <EditProfile
           handleChange={handleChangeToEditProfile}
