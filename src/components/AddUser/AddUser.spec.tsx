@@ -48,14 +48,6 @@ describe("Components: AddUser", () => {
     expect(dialog).toBeNull();
   });
 
-  it("should render the AddUser component dialog", () => {
-    makeSut({ isOpen: true });
-
-    const dialog = screen.getByTestId("add-user--dialog");
-
-    expect(dialog).toHaveTextContent("Adicionar usuario");
-  });
-
   it("should render the dialog with a title", () => {
     makeSut({ isOpen: true });
 
