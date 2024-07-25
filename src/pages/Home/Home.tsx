@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useState } from "react";
+import { ChangeEvent, FC, useEffect, useState } from "react";
 import {
   Box,
   IconButton,
@@ -27,8 +27,26 @@ export const Home: FC = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [openAddUser, setOpenAddUser] = useState(false);
 
+  const [profile, setProfile] = useState<User | null>(null);
+  const [listUsers, setListUsers] = useState<User[]>([]);
+
   const { loggedUser } = useAuth();
   const { users, deleteUser, updateUser, createUser } = useUserManagement();
+
+  useEffect(() => {
+    let profileData: User | null = null;
+    const listUsersData = users.filter((user) => {
+      if (user.id === loggedUser!.id) {
+        profileData = user;
+        return;
+      }
+
+      return user;
+    });
+
+    setProfile(profileData ?? null);
+    setListUsers(listUsersData);
+  }, [users, loggedUser]);
 
   // EditUser
   const handleChangeToEditUser = (
@@ -95,56 +113,54 @@ export const Home: FC = () => {
         <List
           subheader={
             <HomeHeader
-              userName={loggedUser!.name}
-              handleEditProfile={() => setEditProfile(loggedUser)}
+              user={profile}
+              handleEditProfile={() => setEditProfile(profile)}
               handleAddUser={() => setOpenAddUser(true)}
             />
           }
         >
-          {users.map((user) => {
-            if (user.id !== loggedUser!.id) {
-              return (
-                <ListItem key={user.id} divider>
-                  <img
-                    srcSet={`https://picsum.photos/200?random=${user.id}`}
-                    src={`https://picsum.photos/200?random=${user.id}`}
-                    alt="Imagem de perfil do usuario"
-                    loading="lazy"
-                    width={40}
-                    height={40}
-                    style={{
-                      borderRadius: "50%",
-                      marginRight: "16px",
-                    }}
-                  />
+          {listUsers.map((user) => {
+            return (
+              <ListItem key={user.id} divider>
+                <img
+                  srcSet={`https://picsum.photos/200?random=${user.id}`}
+                  src={`https://picsum.photos/200?random=${user.id}`}
+                  alt="Imagem de perfil do usuario"
+                  loading="lazy"
+                  width={40}
+                  height={40}
+                  style={{
+                    borderRadius: "50%",
+                    marginRight: "16px",
+                  }}
+                />
 
-                  <ListItemText
-                    secondary={user.type}
-                    style={{ maxWidth: "100px" }}
-                  />
+                <ListItemText
+                  secondary={user.type}
+                  style={{ maxWidth: "100px" }}
+                />
 
-                  <ListItemText primary={user.name} secondary={user.email} />
+                <ListItemText primary={user.name} secondary={user.email} />
 
-                  {loggedUser!.type === "ADMIN" && (
-                    <ListItemSecondaryAction>
-                      <IconButton
-                        aria-label="edit"
-                        onClick={() => setEditUser(user)}
-                      >
-                        <EditIcon />
-                      </IconButton>
+                {loggedUser!.type === "ADMIN" && (
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      aria-label="edit"
+                      onClick={() => setEditUser(user)}
+                    >
+                      <EditIcon />
+                    </IconButton>
 
-                      <IconButton
-                        aria-label="delete"
-                        onClick={() => deleteUser(user.id)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  )}
-                </ListItem>
-              );
-            }
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() => deleteUser(user.id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                )}
+              </ListItem>
+            );
           })}
         </List>
 

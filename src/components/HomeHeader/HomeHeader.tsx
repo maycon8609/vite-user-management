@@ -2,21 +2,13 @@ import { FC } from "react";
 import { Box, IconButton, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
-import { useAuth } from "../../hooks";
-
-interface HomeHeaderProps {
-  userName: string;
-  handleAddUser: () => void;
-  handleEditProfile: () => void;
-}
+import type { HomeHeaderProps } from "./types";
 
 export const HomeHeader: FC<HomeHeaderProps> = ({
-  userName,
+  user,
   handleAddUser,
   handleEditProfile,
 }) => {
-  const { loggedUser } = useAuth();
-
   return (
     <Box
       component="header"
@@ -48,11 +40,11 @@ export const HomeHeader: FC<HomeHeaderProps> = ({
         />
 
         <Typography component="h1" variant="h5">
-          {userName}
+          {user && user.name}
         </Typography>
       </Box>
 
-      {loggedUser!.type === "ADMIN" && (
+      {user && user.type === "ADMIN" && (
         <Box
           display="flex"
           justifyContent="space-between"
