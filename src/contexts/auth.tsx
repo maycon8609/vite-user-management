@@ -7,32 +7,38 @@ import type { AuthContextProps, AuthProviderProps } from "./types";
 export const AuthContext = createContext({} as AuthContextProps);
 
 export const AuthProvider = ({ children }: AuthProviderProps): ReactElement => {
-  const [loggedUser, setLoggedUser] = useState<User | null>(null);
+  const [loggedUser, setLoggedUser] = useState<Pick<
+    User,
+    "id" | "type"
+  > | null>(null);
 
   const { users, createUser } = useUserManagement();
 
   useEffect(() => {
     const userToken = localStorage.getItem("user_token");
 
-    if (userToken) {
+    if (userToken && !loggedUser) {
       const token = JSON.parse(userToken);
 
-      const loggedUser = users.find((user) => user.id === token.id);
+      const user = users.find((user) => user.id === token.id);
 
-      if (loggedUser) setLoggedUser(loggedUser);
+      if (user) setLoggedUser({ id: user.id, type: user.type });
     }
-  }, [users]);
+  }, [users, loggedUser]);
 
   const signIn = (email: string, password: string): string | void => {
     if (!users.length) return "Usuário não cadastrado";
 
-    const loggedUser = users.find(
+    const user = users.find(
       (user) => user.email === email && user.password === password
     );
 
-    if (loggedUser) {
-      localStorage.setItem("user_token", JSON.stringify({ loggedUser }));
-      setLoggedUser(loggedUser);
+    if (user) {
+      localStorage.setItem(
+        "user_token",
+        JSON.stringify({ id: user.id, type: user.type })
+      );
+      setLoggedUser({ id: user.id, type: user.type });
     } else {
       return "E-mail ou senha incorretos";
     }

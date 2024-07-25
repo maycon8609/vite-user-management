@@ -17,7 +17,7 @@ export const UserManagementProvider = ({
 }: UserManagementProviderProps): ReactElement => {
   const [users, setUsers] = useState<User[]>([]);
 
-  const loadUserData = () => {
+  useEffect(() => {
     const usersStorage = localStorage.getItem("users_bd");
 
     if (usersStorage) {
@@ -26,10 +26,6 @@ export const UserManagementProvider = ({
     } else {
       mockUsersDB();
     }
-  };
-
-  useEffect(() => {
-    loadUserData();
   }, []);
 
   const createUser = (
@@ -50,28 +46,31 @@ export const UserManagementProvider = ({
       },
     ];
     localStorage.setItem("users_bd", JSON.stringify(data));
-    loadUserData();
+    setUsers(data);
   };
 
   const updateUser = (
     user: Partial<Omit<User, "id">> & Pick<User, "id">
   ): void => {
-    const data = users;
-    const indexToTargetUser = data.findIndex((item) => item.id === user.id);
+    const data = users.map((item) => {
+      if (item.id === user.id) {
+        return {
+          ...item,
+          ...user,
+        };
+      }
 
-    data[indexToTargetUser] = {
-      ...data[indexToTargetUser],
-      ...user,
-    };
+      return item;
+    });
 
     localStorage.setItem("users_bd", JSON.stringify(data));
-    loadUserData();
+    setUsers(data);
   };
 
   const deleteUser = (id: string) => {
     const data = users.filter((user) => user.id !== id);
     localStorage.setItem("users_bd", JSON.stringify(data));
-    loadUserData();
+    setUsers(data);
   };
 
   return (

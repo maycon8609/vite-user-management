@@ -7,7 +7,7 @@ export type AuthProviderProps = {
 }
 
 export type AuthContextProps = {
-  loggedUser: User | null;
+  loggedUser: Pick<User, 'id' | 'type'> | null;
   signed: boolean;
   signIn: (email: string, password: string) => string | void;
   signOut: () => void;
