@@ -1,4 +1,5 @@
 import { createContext, ReactElement, useEffect, useState } from "react";
+import { v4 as uuidV4 } from "uuid";
 
 import { mockUsersDB } from "./util";
 import type { User } from "@/global/types";
@@ -44,7 +45,7 @@ export const UserManagementProvider = ({
     const data: User[] = [
       ...users,
       {
-        id: Math.random().toString(36).substring(2),
+        id: uuidV4(),
         ...user,
       },
     ];
