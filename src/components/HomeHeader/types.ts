@@ -1,7 +1,8 @@
 import { User } from "@/global/types";
 
 export type HomeHeaderProps = {
-  user: User | null;
+  'data-testid'?: string
   handleAddUser: () => void;
   handleEditProfile: () => void;
+  user: User | null;
 }
