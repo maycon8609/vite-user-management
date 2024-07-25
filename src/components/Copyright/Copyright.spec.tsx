@@ -12,8 +12,8 @@ const makeSut = (
 };
 
 describe("Components: Copyright", () => {
-  it("deveria renderizar o copyright", () => {
-    const copyrightContent = `Copyright © maycon silva ${new Date().getFullYear()}.`
+  it("should render the copyright component", () => {
+    const copyrightContent = `Copyright © maycon silva ${new Date().getFullYear()}.`;
     makeSut();
 
     const copyright = screen.getByTestId("copyright--typography");

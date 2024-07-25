@@ -57,12 +57,16 @@ export const SignIn: FC = () => {
         <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5">
+        <Typography component="h1" data-testid="sign-in--title" variant="h5">
           Entrar
         </Typography>
 
         {error && (
-          <Alert severity="error" sx={{ width: "100%", mt: 2 }}>
+          <Alert
+            data-testid="sign-in--error-alert"
+            severity="error"
+            sx={{ width: "100%", mt: 2 }}
+          >
             {error}
           </Alert>
         )}
@@ -89,10 +93,10 @@ export const SignIn: FC = () => {
             type="password"
           />
           <Button
-            type="submit"
             fullWidth
-            variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            type="submit"
+            variant="contained"
           >
             Entrar
           </Button>
