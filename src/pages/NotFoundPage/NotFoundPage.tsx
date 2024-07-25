@@ -17,7 +17,11 @@ export const NotFoundPage: FC = () => {
           height: "100vh",
         }}
       >
-        <ErrorOutlineIcon color="error" sx={{ fontSize: 80 }} />
+        <ErrorOutlineIcon
+          color="error"
+          data-testid="not-found-page--error-icon"
+          sx={{ fontSize: 80 }}
+        />
         <Typography component="h1" variant="h4" gutterBottom>
           404 - Página não encontrada
         </Typography>
