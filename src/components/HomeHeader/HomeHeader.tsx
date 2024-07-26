@@ -1,7 +1,9 @@
 import { FC } from "react";
 import { Box, IconButton, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
+import LogoutIcon from "@mui/icons-material/Logout";
 
+import { useAuth } from "@/hooks";
 import type { HomeHeaderProps } from "./types";
 
 export const HomeHeader: FC<HomeHeaderProps> = ({
@@ -10,6 +12,8 @@ export const HomeHeader: FC<HomeHeaderProps> = ({
   handleAddUser,
   handleEditProfile,
 }) => {
+  const { signOut } = useAuth();
+
   return (
     <Box
       data-testid={`${datatestId}--container`}
@@ -17,6 +21,9 @@ export const HomeHeader: FC<HomeHeaderProps> = ({
       display="flex"
       justifyContent="space-between"
       gap={2}
+      sx={{
+        mb: 2,
+      }}
     >
       <Box
         component="div"
@@ -52,32 +59,63 @@ export const HomeHeader: FC<HomeHeaderProps> = ({
         </Typography>
       </Box>
 
-      {user && user.type === "ADMIN" && (
+      <Box display="flex" gap={3}>
+        {user && user.type === "ADMIN" && (
+          <Box
+            data-testid={`${datatestId}--add-user--container`}
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            onClick={handleAddUser}
+            style={{
+              cursor: "pointer",
+            }}
+          >
+            <Typography
+              component="h1"
+              data-testid={`${datatestId}--add-user--title`}
+              variant="h5"
+            >
+              Adicionar usuario
+            </Typography>
+
+            <IconButton
+              data-testid={`${datatestId}--add-user--icon`}
+              edge="end"
+              aria-label="add"
+            >
+              <AddIcon />
+            </IconButton>
+          </Box>
+        )}
+
         <Box
-          data-testid={`${datatestId}--add-user--container`}
+          data-testid={`${datatestId}--logout--container`}
           display="flex"
           justifyContent="space-between"
           alignItems="center"
-          gap={2}
+          onClick={signOut}
+          style={{
+            cursor: "pointer",
+          }}
         >
           <Typography
             component="h1"
-            data-testid={`${datatestId}--add-user--title`}
+            data-testid={`${datatestId}--logout--title`}
             variant="h5"
           >
-            Adicionar usuario
+            Sair
           </Typography>
 
           <IconButton
-            data-testid={`${datatestId}--add-user--icon`}
+            data-testid={`${datatestId}--logout--icon`}
             edge="end"
-            aria-label="add"
-            onClick={handleAddUser}
+            aria-label="logout"
           >
-            <AddIcon />
+            <LogoutIcon />
           </IconButton>
         </Box>
-      )}
+      </Box>
     </Box>
   );
 };
