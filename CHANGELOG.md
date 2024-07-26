@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/maycon8609/vite-user-management/compare/v1.0.0...v1.1.0) (2024-07-26)
+
+
+### Features
+
+* add logout icon to home ([51f4eb9](https://github.com/maycon8609/vite-user-management/commit/51f4eb919b294be5730f5389edd03bc882c163ea))
+
 # 1.0.0 (2024-07-25)
 
 
