@@ -11,6 +11,12 @@
 
 Este projeto e uma aplicação web desenvolvida com react, vite e typescript, o mesmo permite gerenciar usuários.
 
+O armazenamento das informações esta sendo feito no localStorage:
+
+`users_bd`: Usuários cadastrados.
+
+`user_token`: Informações do usuario logado na aplicação, `id` e `type` somente.
+
 ## Funcionalidades
 
 - [x] Autenticação: A aplicação é protegida por login e senha.

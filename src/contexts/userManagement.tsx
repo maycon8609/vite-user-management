@@ -21,10 +21,11 @@ export const UserManagementProvider = ({
     const usersStorage = localStorage.getItem("users_bd");
 
     if (usersStorage) {
-      const storedUsers: User[] = JSON.parse(usersStorage);
-      setUsers(storedUsers);
+      setUsers(JSON.parse(usersStorage));
     } else {
       mockUsersDB();
+      const newUsers = localStorage.getItem("users_bd");
+      if (newUsers) setUsers(JSON.parse(newUsers));
     }
   }, []);
 
