@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/maycon8609/vite-user-management/compare/v1.1.0...v1.1.1) (2024-07-29)
+
+
+### Bug Fixes
+
+* updates user state in context when creating database ([c048ead](https://github.com/maycon8609/vite-user-management/commit/c048ead2eb18d85ca1e7767ac33500acff28185d))
+
 # [1.1.0](https://github.com/maycon8609/vite-user-management/compare/v1.0.0...v1.1.0) (2024-07-26)
 
 
