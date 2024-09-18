@@ -1,13 +1,14 @@
 # user management
 
-[![React/ViteJS](https://img.shields.io/badge/react/vite-f1f5f9?logo=vite)](https://vitejs.dev/)
-[![Material UI](https://img.shields.io/badge/MUI_-Material--UI-007FFF?logo=mui)](https://mui.com/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-f1f5f9?logo=TypeScript)](https://www.typescriptlang.org/)
-[![Jest](https://img.shields.io/badge/Jest-c21325?logo=jest)](https://jestjs.io/)
-[![Testing Library](https://img.shields.io/badge/Testing--Library-f1f5f9?logo=Testing-Library)](https://testing-library.com/)
-[![semantic-release](https://img.shields.io/badge/semantic--release-e10079?logo=semantic-release)](https://semantic-release.gitbook.io/semantic-release)
-[![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-f1f5f9?logo=GitHub-Actions)](https://docs.github.com/pt/actions)
-[![Vercel](https://img.shields.io/badge/Vercel-000?logo=Vercel)](https://vercel.com/)
+[![React](https://img.shields.io/badge/react-030712?style=for-the-badge&logo=react)](https://react.dev/)
+[![vite js](https://img.shields.io/badge/vitejs-030712?style=for-the-badge&logo=vite)](https://vitejs.dev/)
+[![Material UI](https://img.shields.io/badge/Material--UI-030712?style=for-the-badge&logo=mui)](https://mui.com/)
+[![typescript](https://img.shields.io/badge/typescript-030712?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![Jest](https://img.shields.io/badge/Jest-030712?style=for-the-badge&logo=jest)](https://jestjs.io/)
+[![Testing Library](https://img.shields.io/badge/Testing--Library-030712?style=for-the-badge&logo=Testing-Library)](https://testing-library.com/)
+[![semantic-release](https://img.shields.io/badge/semantic--release-030712?style=for-the-badge&logo=semantic-release)](https://semantic-release.gitbook.io/semantic-release)
+[![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-030712?style=for-the-badge&logo=GitHub-Actions)](https://docs.github.com/pt/actions)
+[![Vercel](https://img.shields.io/badge/Vercel-030712?style=for-the-badge&logo=Vercel)](https://vercel.com/)
 
 Este projeto e uma aplicação web desenvolvida com react, vite e typescript, o mesmo permite gerenciar usuários.
 
