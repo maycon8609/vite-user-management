@@ -3,8 +3,8 @@ import { v4 as uuidV4 } from "uuid";
 import { User } from "@/global/types"
 
 const users: User[] = [
-  { id: uuidV4(), email: "admin@softplan.com", name: "softplan adm", password: '123', type: "ADMIN" },
-  { id: uuidV4(), email: "user@softplan.com", name: "softplan user", password: '123', type: "USER" },
+  { id: uuidV4(), email: "admin@email.com", name: "adm", password: '123', type: "ADMIN" },
+  { id: uuidV4(), email: "user@email.com", name: "user", password: '123', type: "USER" },
   { id: uuidV4(), email: "levi.ackerman@google.com", name: "Levi ackerman", password: 'password', type: "USER" },
   { id: uuidV4(), email: "gon.freecss@google.com", name: "Gon Freecss", password: 'password', type: "ADMIN" },
   { id: uuidV4(), email: "killua.zoldyck@google.com", name: "Killua Zoldyck", password: 'password', type: "USER" },

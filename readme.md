@@ -68,14 +68,14 @@ ou
 Usuario com nivel de acesso `ADMIN`
 
 ```bash
-  email: admin@softplan.com
+  email: admin@email.com
   senha: 123
 ```
 
 Usuario com nivel de acesso `USER`
 
 ```bash
-  email: user@softplan.com
+  email: user@email.com
   senha: 123
 ```
 
